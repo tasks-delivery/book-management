@@ -21,7 +21,6 @@ before_install:
 install:
 - mvn -N io.takari:maven:wrapper
 - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-- chmod +x deploy_appveyor.sh
 
 branches:
   only:
@@ -30,12 +29,7 @@ branches:
     - /.*/
     
 stages:
-  - deploy test server
   - compile
-  - name: compile
-    if: branch = develop
-  - name: compile
-    if: branch = main
 
 jobs:
   include:
