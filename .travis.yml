@@ -27,6 +27,7 @@ branches:
   only:
     - develop
     - main
+    - /.*/
     
 stages:
   - deploy test server
