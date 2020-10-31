@@ -1,0 +1,153 @@
+body{
+	background: #FFFFFF;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background-color: #E5E9F2;
+  width: 100%;
+  height: 74px;
+}
+
+.back-arrow{
+  margin-left: 1%;
+  width: 27px;
+  height: 27px;
+}
+
+.header-btn-container{
+  display: flex;
+  text-align: center;
+  margin-left: 20%;
+}
+
+.header-btn{
+  color: #47525E;
+  font-family: Lato;
+  font-size: 18px;
+  line-height: 62px;
+  width: 79px;
+  text-align: center;
+}
+
+.section-name{
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  color: #47525E;
+  font-family: Domine;
+  font-size: 26px;
+  line-height: 33px;
+  text-align: left;
+}
+
+.section-separator{
+  border: 1px solid #7E55F3;
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+.field{
+  background-color: #FFFFFF;
+  border: 1px solid #8492A6;
+  border-radius: 5px;
+  width: 265px;
+  height: 50px;
+  color: #8190A5;
+  font-family: Lato;
+  font-size: 18px;
+  line-height: 62px;
+  width: 191px;
+  text-align: left;
+  margin-top: 4%;
+  margin-bottom: 4%;
+}
+
+.category-drop-down{
+  background-color: #FFFFFF;
+  border: 1px solid #8492A6;
+  border-radius: 5px;
+  width: 265px;
+  height: 50px;
+  color: #47525E;
+  font-family: Lato;
+  font-size: 18px;
+  line-height: 62px;
+  width: 191px;
+  text-align: left;
+}
+
+.description{
+  color: #8CA0B6;
+  font-family: Glacial Indifference;
+  font-size: 16px;
+  line-height: 20px;
+  width: 40%;
+  text-align: left;
+  margin-top: 4%;
+  margin-bottom: 4%;
+}
+
+.btn-submit{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #47525E;
+  border-radius: 5px;
+  width: 192px;
+  height: 50px;
+  color: #FFFFFF;
+  font-family: Lato;
+  font-size: 18px;
+  width: 192px;
+  text-align: center;
+}
+
+.box{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+.element-box{
+  display: flex;
+  justify-items: stretch;
+}
+
+.category-tab-box{
+  display: flex;
+  justify-items: center;
+  margin-top: 4%;
+  margin-bottom: 4%;
+  position: relative;
+}
+
+#.tag-box{
+#  position: absolute;
+#  top: 0;
+#  bottom: 0;
+#  margin: auto 0;
+#  margin-left: 4%;
+#  background-color: #7E55F3;
+#  border-radius: 10px;
+#  width: 100px;
+#  height: 30px;
+#  position: relative;
+#}
+#
+#.tag-name{
+#  margin: 0;
+#  position: absolute;
+#  top: 50%;
+#  left: 50%;
+#  margin-right: -50%;
+#  transform: translate(-50%, -50%);
+#  color: #FFFFFF;
+#  font-family: Lato;
+#  font-size: 14px;
+#  text-align: center;
+# }
