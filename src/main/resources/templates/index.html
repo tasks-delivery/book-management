@@ -6,6 +6,21 @@
 	<link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet" />
 </head>
 	<body>
+		<style th:inline="text">
+			body{
+			    background: url([[@{/asset/login-font.png}]])
+			                no-repeat center center fixed;
+			    background-position="fixed";
+			    background-size: cover;
+			    width: 100%;
+			    height: 100%;
+			    position: absolute;
+			    top: 0;
+			    left: 0;
+			    overflow: auto;
+			    overflow: hidden;
+			}
+		</style>
 		<div class="login-container">
 			<input class="btn-join" type="button" onclick="location.href='/search';" value="Join"/>
 		</div>
