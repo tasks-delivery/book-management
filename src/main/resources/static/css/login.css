@@ -1,16 +1,3 @@
-body {
-    background:  url(login-font.png);
-    background-position="fixed";
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: auto;
-    overflow: hidden;
-}
-
 div.login-container {
     width: 250px;
     height: 250px;
