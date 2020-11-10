@@ -39,6 +39,8 @@ public class Book {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean available;
+
     public Book(String name, List<String> categories, User user){
         this.name = name;
         this.categories = categories;
