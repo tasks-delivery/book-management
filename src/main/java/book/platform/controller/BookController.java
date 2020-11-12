@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,13 +85,13 @@ public class BookController {
         return books;
     }
 
-    @GetMapping("/books")
+    @GetMapping("/allBooks")
     public Iterable<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    @GetMapping("/books/{name}")
-    public List<Book> getBooksByName(@RequestParam("categories") List<String> categories, @PathVariable String name) {
+    @GetMapping("/books")
+    public List<Book> getBooksByName(@RequestParam("categories") List<String> categories, @RequestParam("name") String name) {
         List<Book> books = convertBookToList(bookRepository.findAll());
         if (!categories.isEmpty()){
             if (!categories.get(0).isEmpty()){
