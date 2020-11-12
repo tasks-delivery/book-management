@@ -1,37 +1,9 @@
  $(document).ready(function() {
   $("#bookFilter").click(function(e) {
 
-/*
-[{"bookId":1,"name":"test","user":{"userId":1,"firstName":"hgjgh","lastName":"ghj"},"available":false,"categories":["Fantasy"]},{"bookId":2,"name":"Book test","user":{"userId":2,"firstName":"test","lastName":"test"},"available":false,"categories":["Detective fiction"]}]
-*/
+   findBook();
 
-var books = [];
-
-var content;
-
-
-
-    var table = document.querySelector("table");
-		$.ajax({
-                 method: "GET",
-                 url: "http://localhost:8080/books/test/?categories=",
-                 success: function(data) {
-                    const obj = JSON.parse(content);
-                    console.log('object is ' + obj)
-                 },
-                 error: function(er) {
-                   console.log(er);
-                 }
-               });
-
-console.log('content is ' + content)
-
-//var object = JSON.parse(content);
-
-//console.log('object is ' + object)
-
-
-
+   var table = document.querySelector("table");
 
    var trArr = table.getElementsByTagName('tr');
     for (var i = 0, l = trArr.length; i < l; i++)
@@ -39,4 +11,33 @@ console.log('content is ' + content)
 
 
   })
+
+  async function findBook() {
+
+  var books = [];
+
+  const endpoint = 'http://localhost:8080/books/test/?categories=';
+  	let response = await fetch(endpoint);
+  	let json = await response.json();
+  	for(i = 0; i < json.length; i++){
+
+		var book = new Book(json[i].name, json[i].categories, json[i].available);
+
+  	    console.log('name is ' + book.name);
+  	    console.log('cat is ' + book.categories);
+  	    console.log('ava is ' + book.available);
+
+  	    books.push(book);
+
+  	}
+
+  	console.log('books are ' + books);
+
+  }
+
+  function Book(name, categories, available) {
+    this.name = name;
+    this.categories = categories;
+    this.available = available;
+  }
 });
