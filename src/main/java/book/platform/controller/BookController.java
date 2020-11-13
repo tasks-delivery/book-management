@@ -32,8 +32,15 @@ public class BookController {
     @PostMapping("/book")
     public ResponseEntity createBook(@RequestBody String body) {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
+
+        if (book.getName().isEmpty()){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be blank");
+        }
+
         Boolean duplicate = isDuplicate(book.getName(), book.getCategories());
         if (!duplicate){
+
             if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
                 book.setAvailable(true);
             }else {
