@@ -57,11 +57,19 @@
 }
 
 .table-container {
-  #margin-left: 2%;
-  #margin-right: 2%;
-  #margin-bottom: 2%;
-
+ margin-left: 2%;
+ margin-right: 2%;
+  margin-bottom: 2%;
   margin-top: 2%;
+}
+
+tr {
+  display: flex;
+  justify-content: space-between;
+}
+
+table {
+  width: 100%;
 }
 
 td {
@@ -69,7 +77,7 @@ td {
   font-family: Domine;
   font-size: 26px;
   line-height: 33px;
-  text-align: left;
+  margin-left: 2%;
 }
 
 .table-separator {
@@ -82,11 +90,40 @@ td {
 
 .column-name-box {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   color: #47525E;
   font-family: Domine;
   font-size: 26px;
   line-height: 33px;
-  text-align: left;
+  margin-right: 2%;
+  margin-left: 2%;
+}
 
+.cell-title-name {
+	  width: 60%;
+}
+
+.cell-title-category {
+	  width: 20%;
+}
+
+.cell-title-availability {
+	  width: 20%;
+}
+
+.name-cell {
+	  width: 60%;
+}
+
+.category-cell {
+	  width: 20%;
+}
+
+.available-cell {
+	  width: 20%;
+}
+
+.book-status-img {
+  width: 31px;
+  height: 40px;
 }

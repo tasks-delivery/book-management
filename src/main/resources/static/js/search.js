@@ -1,22 +1,31 @@
  $(document).ready(function() {
+
+  $(window).load(function(){
+         findBook("", "");
+  });
+
   $("#bookFilter").click(function(e) {
 
-   findBook();
+    var bookName = $("#bookName").val();
+	var categoryList = [];
+    var selector = document.querySelector("select");
+    var option = selector.options[selector.selectedIndex];
 
-   var table = document.querySelector("table");
+	categoryList.push(option.value);
 
-   var trArr = table.getElementsByTagName('tr');
-    for (var i = 0, l = trArr.length; i < l; i++)
-        trArr[i].insertCell(0);
-
+    findBook(categoryList, bookName);
 
   })
 
-  async function findBook() {
+  async function findBook(categories, name) {
+
+  $('table').html("");
 
   var books = [];
 
-  const endpoint = 'http://localhost:8080/books/test/?categories=';
+  console.log('filtered name is ' + + name);
+
+  const endpoint = "http://localhost:8080/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
   	let json = await response.json();
   	for(i = 0; i < json.length; i++){
@@ -27,6 +36,8 @@
   	    console.log('cat is ' + book.categories);
   	    console.log('ava is ' + book.available);
 
+        renderTable(book.name, book.categories, book.available)
+
   	    books.push(book);
 
   	}
@@ -35,9 +46,41 @@
 
   }
 
+  function renderTable(name, category, available){
+
+    var table = document.querySelector("table");
+
+        row = document.createElement("tr");
+
+        cellName = document.createElement("td");
+        cellCategory = document.createElement("td");
+        cellAvailable = document.createElement("td");
+
+       // cellAvailable..innerHTML="<img class="book-status-img" src="..static/asset/true.png" th:src="@{asset/true.png}"/>";
+
+        cellName.setAttribute('class', 'name-cell');
+        cellCategory.setAttribute('class', 'category-cell');
+        cellAvailable.setAttribute('class', 'available-cell');
+
+        textName = document.createTextNode(name);
+        textCategory = document.createTextNode(category);
+        textAvailable = document.createTextNode(available);
+
+        cellName.appendChild(textName);
+        cellCategory.appendChild(textCategory);
+        cellAvailable.appendChild(textAvailable);
+
+        row.appendChild(cellName);
+        row.appendChild(cellCategory);
+        row.appendChild(cellAvailable);
+
+        table.appendChild(row);
+  }
+
   function Book(name, categories, available) {
     this.name = name;
     this.categories = categories;
     this.available = available;
   }
+
 });
