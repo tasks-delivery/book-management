@@ -54,11 +54,12 @@
 .table-box {
   background-color: #F7F7F7;
   height: 588px;
+  margin-top: 2%;
 }
 
 .table-container {
- margin-left: 2%;
- margin-right: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
   margin-bottom: 2%;
   margin-top: 2%;
 }
@@ -100,27 +101,30 @@ td {
 }
 
 .cell-title-name {
-	  width: 60%;
+  margin-top: 2%;
+  width: 60%;
 }
 
 .cell-title-category {
-	  width: 20%;
+  margin-top: 2%;
+  width: 20%;
 }
 
 .cell-title-availability {
-	  width: 20%;
+  margin-top: 2%;
+  width: 20%;
 }
 
 .name-cell {
-	  width: 60%;
+  width: 60%;
 }
 
 .category-cell {
-	  width: 20%;
+  width: 20%;
 }
 
 .available-cell {
-	  width: 20%;
+  width: 20%;
 }
 
 .book-status-img {

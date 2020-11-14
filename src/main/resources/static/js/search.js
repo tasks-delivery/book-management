@@ -56,7 +56,10 @@
         cellCategory = document.createElement("td");
         cellAvailable = document.createElement("td");
 
-       // cellAvailable..innerHTML="<img class="book-status-img" src="..static/asset/true.png" th:src="@{asset/true.png}"/>";
+        cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/true.png\" th:src=\"@{asset/true.png}\"/>";
+		if(!available){
+			cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/false.png\" th:src=\"@{asset/true.png}\"/>";
+		}
 
         cellName.setAttribute('class', 'name-cell');
         cellCategory.setAttribute('class', 'category-cell');
@@ -64,7 +67,7 @@
 
         textName = document.createTextNode(name);
         textCategory = document.createTextNode(category);
-        textAvailable = document.createTextNode(available);
+        textAvailable = document.createTextNode("");
 
         cellName.appendChild(textName);
         cellCategory.appendChild(textCategory);
