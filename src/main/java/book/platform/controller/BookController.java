@@ -98,11 +98,6 @@ public class BookController {
         return books;
     }
 
-    @GetMapping("/allBooks")
-    public Iterable<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
-
     @GetMapping("/books")
     public List<Book> getBooksByName(@RequestParam("categories") List<String> categories, @RequestParam("name") String name) {
         List<Book> books = convertBookToList(bookRepository.findAll());
