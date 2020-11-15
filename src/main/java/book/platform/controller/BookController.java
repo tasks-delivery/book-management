@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import book.platform.constant.Category;
 import book.platform.model.Book;
@@ -17,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +58,51 @@ public class BookController {
             }
 
             if (categoryIsExists(book)){
+                bookRepository.save(book);
+                return ResponseEntity.ok(HttpStatus.OK);
+            }else {
+                return ResponseEntity.notFound().build();
+            }
+
+        }else {
+            return ResponseEntity.badRequest()
+                .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+        }
+    }
+
+    @PutMapping("/book/{id}")
+    public ResponseEntity updateBook(@RequestBody String body, @PathVariable Long id) {
+        Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
+        Optional<Book> oldBook = bookRepository.findById(id);
+
+        if (!oldBook.isPresent()){
+            return ResponseEntity.notFound().build();
+        }else {
+            book.setBookId(oldBook.get().getBookId());
+        }
+
+        if (StringUtils.isBlank(book.getName())){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be contains only spaces");
+        }
+
+        if (book.getName().isEmpty()){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be blank");
+        }
+
+        Boolean duplicate = isDuplicate(book.getName(), book.getCategories());
+        if (!duplicate){
+
+            if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
+                book.setAvailable(true);
+            }else {
+                book.setAvailable(false);
+            }
+
+            if (categoryIsExists(book)){
+
+                bookRepository.delete(oldBook.get());
                 bookRepository.save(book);
                 return ResponseEntity.ok(HttpStatus.OK);
             }else {
@@ -105,6 +153,10 @@ public class BookController {
             .parallelStream()
             .filter(i -> i.getBookId().equals(id))
             .collect(toList());
+
+        if (books.get(0).isAvailable()){
+            return ResponseEntity.badRequest().body("Book with user cannot be removed");
+        }
 
         if (books.size() > 0){
             bookRepository.delete(books.get(0));
