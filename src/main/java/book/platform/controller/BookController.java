@@ -11,6 +11,7 @@ import book.platform.repository.BookRepository;
 import book.platform.repository.UserRepository;
 import book.platform.util.JsonUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,11 @@ public class BookController {
     @PostMapping("/book")
     public ResponseEntity createBook(@RequestBody String body) {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
+
+        if (StringUtils.isBlank(book.getName())){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be contains only spaces");
+        }
 
         if (book.getName().isEmpty()){
             return ResponseEntity.badRequest()

@@ -25,7 +25,7 @@
 
   console.log('filtered name is ' + + name);
 
-  const endpoint = "http://localhost:8080/books/?categories=" + categories + "&name=" + name;
+  const endpoint = "/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
   	let json = await response.json();
   	for(i = 0; i < json.length; i++){

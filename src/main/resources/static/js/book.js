@@ -15,6 +15,10 @@
         throw new Error('Category or book name are empty');
     }
 
+    if (!bookName.replace(/\s/g, '').length) {
+        throw new Error('Book name cannot be contains only spaces');
+    }
+
     categoryList.push(option.value);
 
 	var bookData = {
