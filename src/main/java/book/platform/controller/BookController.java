@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -101,6 +102,21 @@ public class BookController {
     @GetMapping("/allBooks")
     public Iterable<Book> getAllBooks() {
         return bookRepository.findAll();
+    }
+
+    @DeleteMapping("/book")
+    public ResponseEntity deleteBook(@RequestParam("id") Long id) {
+        List<Book> books = convertBookToList(bookRepository.findAll())
+            .parallelStream()
+            .filter(i -> i.getBookId().equals(id))
+            .collect(toList());
+
+        if (books.size() > 0){
+            bookRepository.delete(books.get(0));
+            return ResponseEntity.ok(HttpStatus.OK);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/books")
