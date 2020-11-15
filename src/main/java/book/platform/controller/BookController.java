@@ -99,11 +99,6 @@ public class BookController {
         return books;
     }
 
-    @GetMapping("/allBooks")
-    public Iterable<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
-
     @DeleteMapping("/book")
     public ResponseEntity deleteBook(@RequestParam("id") Long id) {
         List<Book> books = convertBookToList(bookRepository.findAll())
