@@ -1,20 +1,26 @@
 package book.platform.controller;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
+import book.platform.constant.Category;
 import book.platform.model.Book;
 import book.platform.repository.BookRepository;
 import book.platform.repository.UserRepository;
 import book.platform.util.JsonUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,26 +37,135 @@ public class BookController {
     @PostMapping("/book")
     public ResponseEntity createBook(@RequestBody String body) {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
+
+        if (StringUtils.isBlank(book.getName())){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be contains only spaces");
+        }
+
+        if (book.getName().isEmpty()){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be blank");
+        }
+
         Boolean duplicate = isDuplicate(book.getName(), book.getCategories());
         if (!duplicate){
+
             if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
                 book.setAvailable(true);
             }else {
                 book.setAvailable(false);
             }
-            bookRepository.save(book);
-            return ResponseEntity.ok(HttpStatus.OK);
+
+            if (categoryIsExists(book)){
+                bookRepository.save(book);
+                return ResponseEntity.ok(HttpStatus.OK);
+            }else {
+                return ResponseEntity.notFound().build();
+            }
+
         }else {
             return ResponseEntity.badRequest()
                 .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
         }
     }
 
-    private Boolean isDuplicate(String name, List<String> categories){
-        List<Book> books = convertBookToList(bookRepository.findAll()).stream()
+    @PutMapping("/book/{id}")
+    public ResponseEntity updateBook(@RequestBody String body, @PathVariable Long id) {
+        Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
+        Optional<Book> oldBook = bookRepository.findById(id);
+
+        if (book.getUser().getUserId() == null){
+            book.getUser().setUserId(oldBook.get().getUser().getUserId());
+        }
+
+        if (!oldBook.isPresent()){
+            return ResponseEntity.notFound().build();
+        }else {
+            book.setBookId(oldBook.get().getBookId());
+        }
+
+        if (StringUtils.isBlank(book.getName())){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be contains only spaces");
+        }
+
+        if (book.getName().isEmpty()){
+            return ResponseEntity.badRequest()
+                .body("Book name cannot be blank");
+        }
+
+        if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
+            book.setAvailable(true);
+        }else {
+            book.setAvailable(false);
+        }
+
+        if (categoryIsExists(book)){
+
+           if (book != oldBook.get()){
+               Boolean duplicate = isDuplicate(oldBook.get().getBookId(), book.getName(), book.getCategories());
+
+               if (!duplicate){
+                   bookRepository.save(book);
+               }else {
+                   return ResponseEntity.badRequest()
+                       .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+               }
+
+           }else {
+               return ResponseEntity.badRequest()
+                   .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+           }
+
+            return ResponseEntity.ok(HttpStatus.OK);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    private Boolean categoryIsExists(Book book){
+        List<String> categoryList = new ArrayList<>();
+        categoryList.add(Category.DETECTIVE_FICTION);
+        categoryList.add(Category.DICTIONARY);
+        categoryList.add(Category.FANTASY);
+        categoryList.add(Category.SCIENCE_FICTION);
+        boolean isShown = true;
+        for (String category : book.getCategories()){
+
+            if (!categoryList.contains(category)){
+                isShown = false;
+                break;
+            }
+
+        }
+        return isShown;
+    }
+
+    private Boolean isDuplicate(Long id, String name, List<String> categories){
+        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
             .filter(i -> i.getCategories().containsAll(categories))
             .filter(i -> i.getName().equals(name))
-            .collect(Collectors.toList());
+            .collect(toList());
+
+        if (books.size() != 0){
+            if (books.get(0).getBookId().equals(id)){
+                return false;
+            }else {
+                return true;
+            }
+        }else {
+            return false;
+
+        }
+    }
+
+    private Boolean isDuplicate(String name, List<String> categories){
+        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
+            .filter(i -> i.getCategories().containsAll(categories))
+            .filter(i -> i.getName().equals(name))
+            .collect(toList());
         return books.size() != 0;
     }
 
@@ -60,26 +175,40 @@ public class BookController {
         return books;
     }
 
-    @GetMapping("/books")
-    public Iterable<Book> getAllBooks() {
-        return bookRepository.findAll();
+    @DeleteMapping("/book")
+    public ResponseEntity deleteBook(@RequestParam("id") Long id) {
+        List<Book> books = convertBookToList(bookRepository.findAll())
+            .parallelStream()
+            .filter(i -> i.getBookId().equals(id))
+            .collect(toList());
+
+        if (!books.get(0).isAvailable()){
+            return ResponseEntity.badRequest().body("Book with user cannot be removed");
+        }
+
+        if (books.size() > 0){
+            bookRepository.delete(books.get(0));
+            return ResponseEntity.ok(HttpStatus.OK);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/books/{name}")
-    public List<Book> getBooksByName(@RequestParam("categories") List<String> categories, @PathVariable String name) {
+    @GetMapping("/books")
+    public List<Book> getBooksByName(@RequestParam("categories") List<String> categories, @RequestParam("name") String name) {
         List<Book> books = convertBookToList(bookRepository.findAll());
         if (!categories.isEmpty()){
             if (!categories.get(0).isEmpty()){
                 books = books.stream()
                     .filter(i -> i.getCategories().containsAll(categories))
-                    .collect(Collectors.toList());
+                    .collect(toList());
             }
         }
 
         if (!name.isEmpty()){
             books = books.stream()
                 .filter(i -> i.getName().contains(name))
-                .collect(Collectors.toList());
+                .collect(toList());
         }
 
         return books;

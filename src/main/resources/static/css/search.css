@@ -1,0 +1,133 @@
+.search-container {
+  margin-left: 3%;
+  margin-right: 3%;
+  margin-top: 2%;
+  margin-bottom: 3%;
+}
+
+.admin-icon{
+  width: 50px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: 2%;
+}
+
+.page-title {
+  color: #000000;
+  font-family: Domine;
+  font-size: 18px;
+  line-height: 28px;
+  width: 620px;
+  text-align: left;
+}
+
+.page-description {
+  color: #47525E;
+  font-family: Domine;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: left;
+}
+
+.label {
+  color: #8190A5;
+  font-family: Lato;
+  font-size: 18px;
+  line-height: 28px;
+  width: 400px;
+  text-align: left;
+  display: block;
+}
+
+.control-box {
+  width: 191px;
+  display:inline-block;
+  margin-right: 1%;
+  margin-top: 3%;
+}
+
+.field{
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.table-box {
+  background-color: #F7F7F7;
+  height: 588px;
+  margin-top: 2%;
+}
+
+.table-container {
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+tr {
+  display: flex;
+  justify-content: space-between;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  color: #47525E;
+  font-family: Domine;
+  font-size: 26px;
+  line-height: 33px;
+  margin-left: 2%;
+}
+
+.table-separator {
+  border: 3px solid #8492A6;
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.column-name-box {
+  display: flex;
+  justify-content: space-between;
+  color: #47525E;
+  font-family: Domine;
+  font-size: 26px;
+  line-height: 33px;
+  margin-right: 2%;
+  margin-left: 2%;
+}
+
+.cell-title-name {
+  margin-top: 2%;
+  width: 60%;
+}
+
+.cell-title-category {
+  margin-top: 2%;
+  width: 20%;
+}
+
+.cell-title-availability {
+  margin-top: 2%;
+  width: 20%;
+}
+
+.name-cell {
+  width: 60%;
+}
+
+.category-cell {
+  width: 20%;
+}
+
+.available-cell {
+  width: 20%;
+}
+
+.book-status-img {
+  width: 31px;
+  height: 40px;
+}
