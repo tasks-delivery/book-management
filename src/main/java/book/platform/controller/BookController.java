@@ -75,6 +75,10 @@ public class BookController {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
         Optional<Book> oldBook = bookRepository.findById(id);
 
+        if (book.getUser().getUserId() == null){
+            book.getUser().setUserId(oldBook.get().getUser().getUserId());
+        }
+
         if (!oldBook.isPresent()){
             return ResponseEntity.notFound().build();
         }else {
@@ -91,28 +95,34 @@ public class BookController {
                 .body("Book name cannot be blank");
         }
 
-        Boolean duplicate = isDuplicate(book.getName(), book.getCategories());
-        if (!duplicate){
-
-            if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
-                book.setAvailable(true);
-            }else {
-                book.setAvailable(false);
-            }
-
-            if (categoryIsExists(book)){
-
-                bookRepository.delete(oldBook.get());
-                bookRepository.save(book);
-                return ResponseEntity.ok(HttpStatus.OK);
-            }else {
-                return ResponseEntity.notFound().build();
-            }
-
+        if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
+            book.setAvailable(true);
         }else {
-            return ResponseEntity.badRequest()
-                .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+            book.setAvailable(false);
         }
+
+        if (categoryIsExists(book)){
+
+           if (book != oldBook.get()){
+               Boolean duplicate = isDuplicate(oldBook.get().getBookId(), book.getName(), book.getCategories());
+
+               if (!duplicate){
+                   bookRepository.save(book);
+               }else {
+                   return ResponseEntity.badRequest()
+                       .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+               }
+
+           }else {
+               return ResponseEntity.badRequest()
+                   .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+           }
+
+            return ResponseEntity.ok(HttpStatus.OK);
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     private Boolean categoryIsExists(Book book){
@@ -131,6 +141,24 @@ public class BookController {
 
         }
         return isShown;
+    }
+
+    private Boolean isDuplicate(Long id, String name, List<String> categories){
+        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
+            .filter(i -> i.getCategories().containsAll(categories))
+            .filter(i -> i.getName().equals(name))
+            .collect(toList());
+
+        if (books.size() != 0){
+            if (books.get(0).getBookId().equals(id)){
+                return false;
+            }else {
+                return true;
+            }
+        }else {
+            return false;
+
+        }
     }
 
     private Boolean isDuplicate(String name, List<String> categories){
@@ -154,7 +182,7 @@ public class BookController {
             .filter(i -> i.getBookId().equals(id))
             .collect(toList());
 
-        if (books.get(0).isAvailable()){
+        if (!books.get(0).isAvailable()){
             return ResponseEntity.badRequest().body("Book with user cannot be removed");
         }
 
