@@ -131,3 +131,18 @@ td {
   width: 31px;
   height: 40px;
 }
+
+.edit-book-img {
+  width: 30px;
+  height: 30px;
+  margin-left: 25%;
+  margin-bottom: 2%;
+}
+
+.remove-book-img {
+  width: 30px;
+  height: 30px;
+  margin-left: 10%;
+  margin-bottom: 2%;
+}
+

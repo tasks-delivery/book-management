@@ -56,9 +56,14 @@
         cellCategory = document.createElement("td");
         cellAvailable = document.createElement("td");
 
-        cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/true.png\" th:src=\"@{asset/true.png}\"/>";
+        cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/true.png\" th:src=\"@{asset/true.png}\"/>"
+        + "<img onclick=\"location.href='/edit';\" class=\"edit-book-img\" src=\"/asset/edit-icon.png\" th:src=\"@{asset/edit-icon.png}\"/>"
+        +"<img class=\"remove-book-img\" src=\"/asset/delete-icon.png\" th:src=\"@{asset/delete-icon.png}\"/>";
+
 		if(!available){
-			cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/false.png\" th:src=\"@{asset/true.png}\"/>";
+			cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/false.png\" th:src=\"@{asset/true.png}\"/>"
+			+ "<img onclick=\"location.href='/edit';\" class=\"edit-book-img\" src=\"/asset/edit-icon.png\" th:src=\"@{asset/edit-icon.png}\"/>"
+			+"<img class=\"remove-book-img\" src=\"/asset/delete-icon.png\" th:src=\"@{asset/delete-icon.png}\"/>";
 		}
 
         cellName.setAttribute('class', 'name-cell');
