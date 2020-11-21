@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Book Platform</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
+	<link href="../static/css/header.css" th:href="@{/css/header.css}" rel="stylesheet" />
+	<link href="../static/css/book.css" th:href="@{/css/book.css}" rel="stylesheet" />
+	<script type="text/javascript" th:src="@{/js/edit.js}" src="../static/js/edit.js"></script>
+</head>
+	<body>
+		<div class="book-container">
+			<header class="header">
+				<img onclick="location.href='/';" src="..static/asset/back-arrow.png" th:src="@{asset/back-arrow.png}" class="back-arrow"/>
+				<div class="header-btn-container">
+					<div class="header-btn">Home</div>
+					<div class="header-btn">About</div>
+					<div class="header-btn">Features</div>
+					<div class="header-btn">Pricing</div>
+					<div class="header-btn">Contact us</div>
+				</div>
+			</header>
+			<div class="book-container">
+				<div class="section-name">Book info</div>
+				<div class="section-separator"></div>
+				<div class="element-box">
+					<div class="box">
+						<input id="book-name" type="text" class="field" placeholder="Name">
+						<div class="category-tab-box">
+							<select id="category-selector" class="drop-down">
+								<option value="">Category</option>
+								<option>Detective fiction</option>
+								<option>Fantasy</option>
+								<option>Science fiction</option>
+								<option>Dictionary</option>
+							</select>
+							<!--
+							<div class="tag-box">
+								<span class="tag-name">Detective fiction</span>
+							</div>
+							-->
+						</div>
+					</div>
+					<div class="description">Describe the book you want to add, starting with the title and choosing a category. The title of the book must be unique.</div>
+				</div>
+			</div>
+			<div class="user-container">
+				<div class="section-name">User info</div>
+				<div class="section-separator"></div>
+				<div class="element-box">
+					<div class="box">
+						<input type="text" class="field" id="first-name" value="" placeholder="First name">
+						<input type="text" class="field" id="last-name" value="" placeholder="Last name">
+					</div>
+					<div class="description">The book may be in the possession of some person, so you need to fill in the name and surname of the person who currently has the book.
+						If the user does not have the book yet, then the fields can be left blank.
+					</div>
+				</div>
+			</div>
+			<input id="bookSubmit" class="button" type="button" value="Submit"/>
+		</div>
+	</body>
+</html>
