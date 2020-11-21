@@ -1,4 +1,14 @@
- $(document).ready(function() {
+var books = [];
+
+function storeBookId(event){
+
+    window.onclick = e => {
+        localStorage.setItem("bookId", e.target.id);
+    }
+
+}
+
+$(document).ready(function() {
 
   $(window).load(function(){
          findBook("", "");
@@ -21,8 +31,6 @@
 
   $('table').html("");
 
-  var books = [];
-
   console.log('filtered name is ' + + name);
 
   const endpoint = "/books/?categories=" + categories + "&name=" + name;
@@ -30,13 +38,14 @@
   	let json = await response.json();
   	for(i = 0; i < json.length; i++){
 
-		var book = new Book(json[i].name, json[i].categories, json[i].available);
+		var book = new Book(json[i].bookId, json[i].name, json[i].categories, json[i].available);
 
+  	    console.log('bookId is ' + book.bookId);
   	    console.log('name is ' + book.name);
   	    console.log('cat is ' + book.categories);
   	    console.log('ava is ' + book.available);
 
-        renderTable(book.name, book.categories, book.available)
+        renderTable(book)
 
   	    books.push(book);
 
@@ -46,7 +55,15 @@
 
   }
 
-  function renderTable(name, category, available){
+	function renderIcon(available, bookId){
+		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
+        +"<a href='/edit' onclick='storeBookId()'>"
+        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"</a>"
+        +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>";
+	}
+
+  function renderTable(book){
 
     var table = document.querySelector("table");
 
@@ -56,22 +73,14 @@
         cellCategory = document.createElement("td");
         cellAvailable = document.createElement("td");
 
-        cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/true.png\" th:src=\"@{asset/true.png}\"/>"
-        + "<img onclick=\"location.href='/edit';\" class=\"edit-book-img\" src=\"/asset/edit-icon.png\" th:src=\"@{asset/edit-icon.png}\"/>"
-        +"<img class=\"remove-book-img\" src=\"/asset/delete-icon.png\" th:src=\"@{asset/delete-icon.png}\"/>";
-
-		if(!available){
-			cellAvailable.innerHTML="<img class=\"book-status-img\" src=\"/asset/false.png\" th:src=\"@{asset/true.png}\"/>"
-			+ "<img onclick=\"location.href='/edit';\" class=\"edit-book-img\" src=\"/asset/edit-icon.png\" th:src=\"@{asset/edit-icon.png}\"/>"
-			+"<img class=\"remove-book-img\" src=\"/asset/delete-icon.png\" th:src=\"@{asset/delete-icon.png}\"/>";
-		}
+		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
 
         cellName.setAttribute('class', 'name-cell');
         cellCategory.setAttribute('class', 'category-cell');
         cellAvailable.setAttribute('class', 'available-cell');
 
-        textName = document.createTextNode(name);
-        textCategory = document.createTextNode(category);
+        textName = document.createTextNode(book.name);
+        textCategory = document.createTextNode(book.categories);
         textAvailable = document.createTextNode("");
 
         cellName.appendChild(textName);
@@ -85,7 +94,8 @@
         table.appendChild(row);
   }
 
-  function Book(name, categories, available) {
+  function Book(bookId, name, categories, available) {
+    this.bookId = bookId;
     this.name = name;
     this.categories = categories;
     this.available = available;

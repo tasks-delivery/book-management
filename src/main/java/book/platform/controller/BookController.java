@@ -214,4 +214,9 @@ public class BookController {
         return books;
     }
 
+    @GetMapping("/book/{id}")
+    public Book getBookById(@PathVariable Long id){
+        return bookRepository.findById(id).get();
+    }
+
 }
