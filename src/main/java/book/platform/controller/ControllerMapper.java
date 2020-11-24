@@ -20,4 +20,9 @@ public class ControllerMapper {
     public String getAddBook() {
         return "book";
     }
+
+    @RequestMapping(value = "/edit")
+    public String getEditBook() {
+        return "edit";
+    }
 }
