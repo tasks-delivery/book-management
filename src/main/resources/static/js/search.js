@@ -8,10 +8,56 @@ function storeBookId(event){
 
 }
 
+//***********************************Book Dialog**************************
+
+
+
+function removeBook(event){
+
+    window.onclick = e => {
+
+
+jQuery(function($) {
+$( "#myModal" ).dialog({
+      autoOpen: false,
+      height: 520,
+      width:  520, resizable: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+
+    $( "#removeIcon" ).click(function() {
+      $( "#myModal" ).dialog( "open" );
+    });
+
+ });
+
+
+    }
+
+}
+
+
+
+//**********************************************************************
+
 $(document).ready(function() {
 
   $(window).load(function(){
-         findBook("", "");
+        var header = document.querySelector("header");
+        var img = document.createElement("img")
+        img.setAttribute('onclick', 'location.href="/book";');
+        img.setAttribute('src', '/asset/admin-icon.png');
+        img.setAttribute('th:src', '@{asset/admin-icon.png}');
+        img.setAttribute('class', 'admin-icon');
+        header.appendChild(img);
+        findBook("", "");
   });
 
   $("#bookFilter").click(function(e) {
@@ -55,13 +101,25 @@ $(document).ready(function() {
 
   }
 
-	function renderIcon(available, bookId){
-		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
-        +"<a href='/edit' onclick='storeBookId()'>"
-        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
-        +"</a>"
-        +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>";
-	}
+
+
+
+
+
+  function renderIcon(available, bookId){
+  	return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
+      +"<a href='/edit' onclick='storeBookId()'>"
+      +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+      +"</a>"
+      +"<a id='removeIcon'>"
+      +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+      +"</a>";
+  }
+
+    function dialog() {
+        var dialog = $('#bookDialog').dialog();
+
+    }
 
   function renderTable(book){
 
