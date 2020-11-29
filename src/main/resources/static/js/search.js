@@ -1,3 +1,10 @@
+function Book(bookId, name, categories, available) {
+  this.bookId = bookId;
+  this.name = name;
+  this.categories = categories;
+  this.available = available;
+}
+
 var books = [];
 
 function storeBookId(event){
@@ -8,56 +15,111 @@ function storeBookId(event){
 
 }
 
-//***********************************Book Dialog**************************
-
-
-
 function removeBook(event){
 
     window.onclick = e => {
 
+    if(e.target.id.length != 0){
 
-jQuery(function($) {
-$( "#myModal" ).dialog({
-      autoOpen: false,
-      height: 520,
-      width:  520, resizable: false,
-      show: {
-        effect: "blind",
-        duration: 1000
-      },
-      hide: {
-        effect: "explode",
-        duration: 1000
-      }
-    });
+         $.ajax({
+              method: "DELETE",
+              url: "book/?id=" + e.target.id,
+              error: function(er) {
+                console.log(er);
+              },
+               statusCode: {
+                  200: function() {
+                      $('table').html("");
+                      console.log("Book is removed");
 
-    $( "#removeIcon" ).click(function() {
-      $( "#myModal" ).dialog( "open" );
-    });
+                      for(i = 0; i < books.length; i++){
 
- });
+                         if(books[i].bookId == e.target.id){
 
+                             var index = books.indexOf(books[i]);
+                             if (index !== -1) {
+                               books.splice(index, 1);
+                               break;
+                             }
+
+                         }
+                      }
+
+                      for(i = 0; i < books.length; i++){
+
+                         var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
+
+                         console.log('bookId is ' + book.bookId);
+                         console.log('name is ' + book.name);
+                         console.log('cat is ' + book.categories);
+                         console.log('ava is ' + book.available);
+
+                         renderTable(book)
+
+                      }
+
+                  },
+                  400: function() {
+                    throw new Error('Book with user cannot be removed');
+                  },
+                  404: function() {
+                    throw new Error('Book not found');
+                  }
+                }
+            });
+
+        }
 
     }
 
 }
 
+function renderIcon(available, bookId){
+		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
+        +"<a href='/edit' onclick='storeBookId()'>"
+        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"</a>"
+        +"<a onclick='removeBook()'>"
+        +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+        +"</a>";
+	}
 
+  function renderTable(book){
 
-//**********************************************************************
+    var table = document.querySelector("table");
+
+        row = document.createElement("tr");
+
+        cellName = document.createElement("td");
+        cellCategory = document.createElement("td");
+        cellAvailable = document.createElement("td");
+
+		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
+
+        cellName.setAttribute('class', 'name-cell');
+        cellCategory.setAttribute('class', 'category-cell');
+        cellAvailable.setAttribute('class', 'available-cell');
+
+        textName = document.createTextNode(book.name);
+        textCategory = document.createTextNode(book.categories);
+        textAvailable = document.createTextNode("");
+
+        cellName.appendChild(textName);
+        cellCategory.appendChild(textCategory);
+        cellAvailable.appendChild(textAvailable);
+
+        row.appendChild(cellName);
+        row.appendChild(cellCategory);
+        row.appendChild(cellAvailable);
+
+        table.appendChild(row);
+  }
+
 
 $(document).ready(function() {
 
   $(window).load(function(){
-        var header = document.querySelector("header");
-        var img = document.createElement("img")
-        img.setAttribute('onclick', 'location.href="/book";');
-        img.setAttribute('src', '/asset/admin-icon.png');
-        img.setAttribute('th:src', '@{asset/admin-icon.png}');
-        img.setAttribute('class', 'admin-icon');
-        header.appendChild(img);
-        findBook("", "");
+         findBook("", "");
   });
 
   $("#bookFilter").click(function(e) {
@@ -99,64 +161,6 @@ $(document).ready(function() {
 
   	console.log('books are ' + books);
 
-  }
-
-
-
-
-
-
-  function renderIcon(available, bookId){
-  	return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
-      +"<a href='/edit' onclick='storeBookId()'>"
-      +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
-      +"</a>"
-      +"<a id='removeIcon'>"
-      +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
-      +"</a>";
-  }
-
-    function dialog() {
-        var dialog = $('#bookDialog').dialog();
-
-    }
-
-  function renderTable(book){
-
-    var table = document.querySelector("table");
-
-        row = document.createElement("tr");
-
-        cellName = document.createElement("td");
-        cellCategory = document.createElement("td");
-        cellAvailable = document.createElement("td");
-
-		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
-
-        cellName.setAttribute('class', 'name-cell');
-        cellCategory.setAttribute('class', 'category-cell');
-        cellAvailable.setAttribute('class', 'available-cell');
-
-        textName = document.createTextNode(book.name);
-        textCategory = document.createTextNode(book.categories);
-        textAvailable = document.createTextNode("");
-
-        cellName.appendChild(textName);
-        cellCategory.appendChild(textCategory);
-        cellAvailable.appendChild(textAvailable);
-
-        row.appendChild(cellName);
-        row.appendChild(cellCategory);
-        row.appendChild(cellAvailable);
-
-        table.appendChild(row);
-  }
-
-  function Book(bookId, name, categories, available) {
-    this.bookId = bookId;
-    this.name = name;
-    this.categories = categories;
-    this.available = available;
   }
 
 });
