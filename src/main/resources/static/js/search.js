@@ -1,3 +1,10 @@
+function Book(bookId, name, categories, available) {
+  this.bookId = bookId;
+  this.name = name;
+  this.categories = categories;
+  this.available = available;
+}
+
 var books = [];
 
 function storeBookId(event){
@@ -7,6 +14,107 @@ function storeBookId(event){
     }
 
 }
+
+function removeBook(event){
+
+    window.onclick = e => {
+
+    if(e.target.id.length != 0){
+
+         $.ajax({
+              method: "DELETE",
+              url: "book/?id=" + e.target.id,
+              error: function(er) {
+                console.log(er);
+              },
+               statusCode: {
+                  200: function() {
+                      $('table').html("");
+                      console.log("Book is removed");
+
+                      for(i = 0; i < books.length; i++){
+
+                         if(books[i].bookId == e.target.id){
+
+                             var index = books.indexOf(books[i]);
+                             if (index !== -1) {
+                               books.splice(index, 1);
+                               break;
+                             }
+
+                         }
+                      }
+
+                      for(i = 0; i < books.length; i++){
+
+                         var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
+
+                         console.log('bookId is ' + book.bookId);
+                         console.log('name is ' + book.name);
+                         console.log('cat is ' + book.categories);
+                         console.log('ava is ' + book.available);
+
+                         renderTable(book)
+
+                      }
+
+                  },
+                  400: function() {
+                    throw new Error('Book with user cannot be removed');
+                  },
+                  404: function() {
+                    throw new Error('Book not found');
+                  }
+                }
+            });
+
+        }
+
+    }
+
+}
+
+function renderIcon(available, bookId){
+		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
+        +"<a href='/edit' onclick='storeBookId()'>"
+        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"</a>"
+        +"<a onclick='removeBook()'>"
+        +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+        +"</a>";
+	}
+
+  function renderTable(book){
+
+    var table = document.querySelector("table");
+
+        row = document.createElement("tr");
+
+        cellName = document.createElement("td");
+        cellCategory = document.createElement("td");
+        cellAvailable = document.createElement("td");
+
+		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
+
+        cellName.setAttribute('class', 'name-cell');
+        cellCategory.setAttribute('class', 'category-cell');
+        cellAvailable.setAttribute('class', 'available-cell');
+
+        textName = document.createTextNode(book.name);
+        textCategory = document.createTextNode(book.categories);
+        textAvailable = document.createTextNode("");
+
+        cellName.appendChild(textName);
+        cellCategory.appendChild(textCategory);
+        cellAvailable.appendChild(textAvailable);
+
+        row.appendChild(cellName);
+        row.appendChild(cellCategory);
+        row.appendChild(cellAvailable);
+
+        table.appendChild(row);
+  }
+
 
 $(document).ready(function() {
 
@@ -53,52 +161,6 @@ $(document).ready(function() {
 
   	console.log('books are ' + books);
 
-  }
-
-	function renderIcon(available, bookId){
-		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
-        +"<a href='/edit' onclick='storeBookId()'>"
-        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
-        +"</a>"
-        +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>";
-	}
-
-  function renderTable(book){
-
-    var table = document.querySelector("table");
-
-        row = document.createElement("tr");
-
-        cellName = document.createElement("td");
-        cellCategory = document.createElement("td");
-        cellAvailable = document.createElement("td");
-
-		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
-
-        cellName.setAttribute('class', 'name-cell');
-        cellCategory.setAttribute('class', 'category-cell');
-        cellAvailable.setAttribute('class', 'available-cell');
-
-        textName = document.createTextNode(book.name);
-        textCategory = document.createTextNode(book.categories);
-        textAvailable = document.createTextNode("");
-
-        cellName.appendChild(textName);
-        cellCategory.appendChild(textCategory);
-        cellAvailable.appendChild(textAvailable);
-
-        row.appendChild(cellName);
-        row.appendChild(cellCategory);
-        row.appendChild(cellAvailable);
-
-        table.appendChild(row);
-  }
-
-  function Book(bookId, name, categories, available) {
-    this.bookId = bookId;
-    this.name = name;
-    this.categories = categories;
-    this.available = available;
   }
 
 });
