@@ -6,6 +6,7 @@
 }
 
 .admin-icon{
+  cursor: pointer;
   width: 50px;
   height: 50px;
   margin-left: auto;
@@ -147,3 +148,41 @@ td {
   cursor: pointer;
 }
 
+.overlay {
+   align-items: center;
+   justify-content: center;
+   display: flex;
+   position:fixed;
+   top:0;
+   left:0;
+   height:100%;
+   width:100%;
+   z-index:100;
+   background-color:#444444;
+   opacity:0.5;
+   filter:alpha(opacity=50);
+}
+
+.dialog-box {
+  opacity: 1;
+  background-color: #F7FFFB;
+  border-radius: 10px;
+  width: 470px;
+  height: 250px;
+  z-index:101;
+}
+
+.dialog-title {
+  color: #47525E;
+  font-family: Lato;
+  font-size: 20px;
+  line-height: 26px;
+  text-align: left;
+}
+
+.btn-dialog {
+  background-color: #47525E;
+  border-radius: 5px;
+  width: 192px;
+  height: 50px;
+}
