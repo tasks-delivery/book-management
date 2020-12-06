@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,6 +39,13 @@ public class Book {
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    @Column
+    @JsonProperty("authors")
+    @ElementCollection(targetClass=Author.class)
+    //@JoinColumn(name = "author_id")
+    private List<Author> authors;
 
     private boolean available;
 
