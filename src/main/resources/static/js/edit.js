@@ -56,7 +56,21 @@ $(document).ready(function() {
                {
                firstName:$("#first-name").val(),
                lastName:$("#last-name").val()
-               }
+               },
+
+//TODO: Fake book location data, should be replaced to final solution in future.
+            location:
+                {
+                variety:'A',
+                number:'2'
+                },
+
+//TODO: Fake author data, should be replaced to final solution in future.
+            authors:
+            [{
+            firstName:'First name test',
+            lastName:'Last name test'
+            }]
    }
 
    console.log(bookData);

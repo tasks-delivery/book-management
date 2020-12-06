@@ -36,9 +36,13 @@ public class Book {
     @ElementCollection(targetClass=String.class)
     private List<String> categories;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn(name = "location_id")
+    private Location location;
 
     @OneToMany(cascade=CascadeType.ALL)
     @Column
