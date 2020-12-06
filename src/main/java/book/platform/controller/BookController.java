@@ -9,7 +9,6 @@ import java.util.Optional;
 import book.platform.constant.Category;
 import book.platform.model.Book;
 import book.platform.repository.BookRepository;
-import book.platform.repository.UserRepository;
 import book.platform.util.JsonUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,9 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BookController {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private BookRepository bookRepository;
