@@ -44,7 +44,6 @@ public class Book {
     @Column
     @JsonProperty("authors")
     @ElementCollection(targetClass=Author.class)
-    //@JoinColumn(name = "author_id")
     private List<Author> authors;
 
     private boolean available;

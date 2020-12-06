@@ -28,7 +28,13 @@
                 {
                 firstName:$("#first-name").val(),
                 lastName:$("#last-name").val()
-                }
+                },
+
+            authors:
+            [{
+            firstName:'First name test',
+            lastName:'Last name test'
+            }]
         }
 
     console.log(bookData);

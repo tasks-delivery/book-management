@@ -48,7 +48,7 @@ public class BookController {
                 .body("Book name cannot be blank");
         }
 
-        if (book.getAuthors().size() > 0){
+        if (book.getAuthors().size() == 0){
             return ResponseEntity.badRequest()
                 .body("Book should have one or more authors");
         }
