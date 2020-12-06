@@ -50,7 +50,7 @@ public class BookController {
                 .body("Book should have one or more authors");
         }
 
-        Boolean duplicate = isDuplicate(book.getName(), book.getCategories().stream().map(Category::getName).collect(toList()));
+        Boolean duplicate = isDuplicate(book.getName(), book.getCategories().parallelStream().map(Category::getName).collect(toList()));
         if (!duplicate){
 
             if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
@@ -68,7 +68,8 @@ public class BookController {
 
         }else {
             return ResponseEntity.badRequest()
-                .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+                .body(String.format("Book with name %s and categories %s exist in the system", book.getName(),
+                                    book.getCategories().parallelStream().map(Category::getName).collect(toList())));
         }
     }
 
@@ -107,18 +108,20 @@ public class BookController {
 
            if (book != oldBook.get()){
                Boolean duplicate = isDuplicate(oldBook.get().getId(), book.getName(),
-                                               book.getCategories().stream().map(Category::getName).collect(toList()));
+                                               book.getCategories().parallelStream().map(Category::getName).collect(toList()));
 
                if (!duplicate){
                    bookRepository.save(book);
                }else {
                    return ResponseEntity.badRequest()
-                       .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+                       .body(String.format("Book with name %s and categories %s exist in the system", book.getName(),
+                                           book.getCategories().parallelStream().map(Category::getName).collect(toList())));
                }
 
            }else {
                return ResponseEntity.badRequest()
-                   .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+                   .body(String.format("Book with name %s and categories %s exist in the system", book.getName(),
+                                       book.getCategories().parallelStream().map(Category::getName).collect(toList())));
            }
 
             return ResponseEntity.ok(HttpStatus.OK);
@@ -147,29 +150,23 @@ public class BookController {
     }
 
     private Boolean isDuplicate(Long id, String name, List<String> categories){
-        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
-            .filter(i -> i.getCategories().containsAll(categories))
-            .filter(i -> i.getName().equals(name))
-            .collect(toList());
-
+        List<Book> books = getBooksByNameAndCategory(name, categories);
         if (books.size() != 0){
-            if (books.get(0).getId().equals(id)){
-                return false;
-            }else {
-                return true;
-            }
+            return !books.get(0).getId().equals(id);
         }else {
             return false;
-
         }
     }
 
-    private Boolean isDuplicate(String name, List<String> categories){
-        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
-            .filter(i -> i.getCategories().containsAll(categories))
+    private List<Book> getBooksByNameAndCategory(String name, List<String> categories){
+        return convertBookToList(bookRepository.findAll()).parallelStream()
+            .filter(i -> i.getCategories().parallelStream().map(Category::getName).collect(toList()).containsAll(categories))
             .filter(i -> i.getName().equals(name))
             .collect(toList());
-        return books.size() != 0;
+    }
+
+    private Boolean isDuplicate(String name, List<String> categories){
+        return getBooksByNameAndCategory(name, categories).size() != 0;
     }
 
     private List<Book> convertBookToList(Iterable<Book> bookIterable){
