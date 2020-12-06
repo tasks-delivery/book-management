@@ -77,8 +77,8 @@ public class BookController {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
         Optional<Book> oldBook = bookRepository.findById(id);
 
-        if (book.getUser().getUserId() == null){
-            book.getUser().setUserId(oldBook.get().getUser().getUserId());
+        if (book.getUser().getId() == null){
+            book.getUser().setId(oldBook.get().getUser().getId());
         }
 
         if (!oldBook.isPresent()){
