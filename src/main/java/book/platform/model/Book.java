@@ -1,5 +1,6 @@
 package book.platform.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -30,6 +31,8 @@ public class Book {
     private Long bookId;
 
     private String name;
+
+    private Timestamp returnDate;
 
     @Column
     @JsonProperty("categories")
