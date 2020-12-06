@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import book.platform.constant.Category;
+import book.platform.constant.CategoryValues;
 import book.platform.model.Book;
+import book.platform.model.Category;
 import book.platform.repository.BookRepository;
 import book.platform.util.JsonUtil;
 
@@ -49,7 +50,7 @@ public class BookController {
                 .body("Book should have one or more authors");
         }
 
-        Boolean duplicate = isDuplicate(book.getName(), book.getCategories());
+        Boolean duplicate = isDuplicate(book.getName(), book.getCategories().parallelStream().map(Category::getName).collect(toList()));
         if (!duplicate){
 
             if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
@@ -67,7 +68,8 @@ public class BookController {
 
         }else {
             return ResponseEntity.badRequest()
-                .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+                .body(String.format("Book with name %s and categories %s exist in the system", book.getName(),
+                                    book.getCategories().parallelStream().map(Category::getName).collect(toList())));
         }
     }
 
@@ -76,14 +78,14 @@ public class BookController {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
         Optional<Book> oldBook = bookRepository.findById(id);
 
-        if (book.getUser().getUserId() == null){
-            book.getUser().setUserId(oldBook.get().getUser().getUserId());
+        if (book.getUser().getId() == null){
+            book.getUser().setId(oldBook.get().getUser().getId());
         }
 
         if (!oldBook.isPresent()){
             return ResponseEntity.notFound().build();
         }else {
-            book.setBookId(oldBook.get().getBookId());
+            book.setId(oldBook.get().getId());
         }
 
         if (StringUtils.isBlank(book.getName())){
@@ -105,18 +107,21 @@ public class BookController {
         if (categoryIsExists(book)){
 
            if (book != oldBook.get()){
-               Boolean duplicate = isDuplicate(oldBook.get().getBookId(), book.getName(), book.getCategories());
+               Boolean duplicate = isDuplicate(oldBook.get().getId(), book.getName(),
+                                               book.getCategories().parallelStream().map(Category::getName).collect(toList()));
 
                if (!duplicate){
                    bookRepository.save(book);
                }else {
                    return ResponseEntity.badRequest()
-                       .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+                       .body(String.format("Book with name %s and categories %s exist in the system", book.getName(),
+                                           book.getCategories().parallelStream().map(Category::getName).collect(toList())));
                }
 
            }else {
                return ResponseEntity.badRequest()
-                   .body(String.format("Book with name %s and categories %s exist in the system", book.getName(), book.getCategories()));
+                   .body(String.format("Book with name %s and categories %s exist in the system", book.getName(),
+                                       book.getCategories().parallelStream().map(Category::getName).collect(toList())));
            }
 
             return ResponseEntity.ok(HttpStatus.OK);
@@ -128,14 +133,14 @@ public class BookController {
 
     private Boolean categoryIsExists(Book book){
         List<String> categoryList = new ArrayList<>();
-        categoryList.add(Category.DETECTIVE_FICTION);
-        categoryList.add(Category.DICTIONARY);
-        categoryList.add(Category.FANTASY);
-        categoryList.add(Category.SCIENCE_FICTION);
+        categoryList.add(CategoryValues.DETECTIVE_FICTION);
+        categoryList.add(CategoryValues.DICTIONARY);
+        categoryList.add(CategoryValues.FANTASY);
+        categoryList.add(CategoryValues.SCIENCE_FICTION);
         boolean isShown = true;
-        for (String category : book.getCategories()){
+        for (Category category : book.getCategories()){
 
-            if (!categoryList.contains(category)){
+            if (!categoryList.contains(category.getName())){
                 isShown = false;
                 break;
             }
@@ -145,29 +150,23 @@ public class BookController {
     }
 
     private Boolean isDuplicate(Long id, String name, List<String> categories){
-        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
-            .filter(i -> i.getCategories().containsAll(categories))
-            .filter(i -> i.getName().equals(name))
-            .collect(toList());
-
+        List<Book> books = getBooksByNameAndCategory(name, categories);
         if (books.size() != 0){
-            if (books.get(0).getBookId().equals(id)){
-                return false;
-            }else {
-                return true;
-            }
+            return !books.get(0).getId().equals(id);
         }else {
             return false;
-
         }
     }
 
-    private Boolean isDuplicate(String name, List<String> categories){
-        List<Book> books = convertBookToList(bookRepository.findAll()).parallelStream()
-            .filter(i -> i.getCategories().containsAll(categories))
+    private List<Book> getBooksByNameAndCategory(String name, List<String> categories){
+        return convertBookToList(bookRepository.findAll()).parallelStream()
+            .filter(i -> i.getCategories().parallelStream().map(Category::getName).collect(toList()).containsAll(categories))
             .filter(i -> i.getName().equals(name))
             .collect(toList());
-        return books.size() != 0;
+    }
+
+    private Boolean isDuplicate(String name, List<String> categories){
+        return getBooksByNameAndCategory(name, categories).size() != 0;
     }
 
     private List<Book> convertBookToList(Iterable<Book> bookIterable){
@@ -180,7 +179,7 @@ public class BookController {
     public ResponseEntity deleteBook(@RequestParam("id") Long id) {
         List<Book> books = convertBookToList(bookRepository.findAll())
             .parallelStream()
-            .filter(i -> i.getBookId().equals(id))
+            .filter(i -> i.getId().equals(id))
             .collect(toList());
 
         if (!books.get(0).isAvailable()){

@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,9 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,23 +25,22 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long bookId;
+    private Long id;
 
     private String name;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="book_id")
+    private List<Category> categories;
+
     private Timestamp returnDate;
 
-    @Column
-    @JsonProperty("categories")
-    @ElementCollection(targetClass=String.class)
-    private List<String> categories;
-
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn (name="user_id")
     private User user;
 
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
-    @JoinColumn(name = "location_id")
+    @OneToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn (name="location_id")
     private Location location;
 
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
@@ -52,14 +48,12 @@ public class Book {
     private Publisher publisher;
 
     @OneToMany(cascade=CascadeType.ALL)
-    @Column
-    @JsonProperty("authors")
-    @ElementCollection(targetClass=Author.class)
+    @JoinColumn(name="book_id")
     private List<Author> authors;
 
     private boolean available;
 
-    public Book(String name, List<String> categories, User user){
+    public Book(String name, List<Category> categories, User user){
         this.name = name;
         this.categories = categories;
         this.user = user;
