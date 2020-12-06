@@ -44,6 +44,10 @@ public class Book {
     @JoinColumn(name = "location_id")
     private Location location;
 
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
+
     @OneToMany(cascade=CascadeType.ALL)
     @Column
     @JsonProperty("authors")

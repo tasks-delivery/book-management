@@ -38,6 +38,13 @@
                 number:'2'
                 },
 
+//TODO: Fake publisher data, should be replaced to final solution in future.
+            publisher:
+                {
+                name:'Publisher Home At Moscow',
+                date:'2020-12-06 20:21:34.231'
+                },
+
 //TODO: Fake author data, should be replaced to final solution in future.
             authors:
             [{
