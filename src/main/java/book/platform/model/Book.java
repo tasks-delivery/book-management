@@ -1,5 +1,6 @@
 package book.platform.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,6 +27,8 @@ public class Book extends BaseModel {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="book_id")
     private List<Category> categories;
+
+    private Timestamp returnDate;
 
     @OneToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn (name="user_id")
