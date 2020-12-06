@@ -1,12 +1,12 @@
 package book.platform.model;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class Publisher {
+public class Category {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -24,14 +24,12 @@ public class Publisher {
 
     private String name;
 
-    private Timestamp date;
-
-    @OneToOne(optional=false, mappedBy="publisher")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     @JsonIgnore
     private Book book;
 
-    public Publisher(String name, Timestamp date){
+    public Category(String name){
         this.name = name;
-        this.date = date;
     }
 }

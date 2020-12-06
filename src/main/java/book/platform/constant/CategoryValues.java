@@ -1,6 +1,6 @@
 package book.platform.constant;
 
-public interface Category {
+public interface CategoryValues {
 
     String DETECTIVE_FICTION = "Detective fiction";
     String FANTASY = "Fantasy";

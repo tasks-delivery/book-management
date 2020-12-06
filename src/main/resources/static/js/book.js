@@ -23,7 +23,9 @@
 
 	var bookData = {
             name: bookName,
-            categories:categoryList,
+            categories:[{
+                       name:categoryList[0]
+                       }],
 
             user:
                 {

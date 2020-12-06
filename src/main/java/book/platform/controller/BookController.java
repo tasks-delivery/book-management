@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import book.platform.constant.Category;
+import book.platform.constant.CategoryValues;
 import book.platform.model.Book;
+import book.platform.model.Category;
 import book.platform.repository.BookRepository;
 import book.platform.util.JsonUtil;
 
@@ -49,7 +50,7 @@ public class BookController {
                 .body("Book should have one or more authors");
         }
 
-        Boolean duplicate = isDuplicate(book.getName(), book.getCategories());
+        Boolean duplicate = isDuplicate(book.getName(), book.getCategories().stream().map(Category::getName).collect(toList()));
         if (!duplicate){
 
             if (book.getUser().getFirstName().isEmpty() || book.getUser().getLastName().isEmpty()){
@@ -83,7 +84,7 @@ public class BookController {
         if (!oldBook.isPresent()){
             return ResponseEntity.notFound().build();
         }else {
-            book.setBookId(oldBook.get().getBookId());
+            book.setId(oldBook.get().getId());
         }
 
         if (StringUtils.isBlank(book.getName())){
@@ -105,7 +106,8 @@ public class BookController {
         if (categoryIsExists(book)){
 
            if (book != oldBook.get()){
-               Boolean duplicate = isDuplicate(oldBook.get().getBookId(), book.getName(), book.getCategories());
+               Boolean duplicate = isDuplicate(oldBook.get().getId(), book.getName(),
+                                               book.getCategories().stream().map(Category::getName).collect(toList()));
 
                if (!duplicate){
                    bookRepository.save(book);
@@ -128,14 +130,14 @@ public class BookController {
 
     private Boolean categoryIsExists(Book book){
         List<String> categoryList = new ArrayList<>();
-        categoryList.add(Category.DETECTIVE_FICTION);
-        categoryList.add(Category.DICTIONARY);
-        categoryList.add(Category.FANTASY);
-        categoryList.add(Category.SCIENCE_FICTION);
+        categoryList.add(CategoryValues.DETECTIVE_FICTION);
+        categoryList.add(CategoryValues.DICTIONARY);
+        categoryList.add(CategoryValues.FANTASY);
+        categoryList.add(CategoryValues.SCIENCE_FICTION);
         boolean isShown = true;
-        for (String category : book.getCategories()){
+        for (Category category : book.getCategories()){
 
-            if (!categoryList.contains(category)){
+            if (!categoryList.contains(category.getName())){
                 isShown = false;
                 break;
             }
@@ -151,7 +153,7 @@ public class BookController {
             .collect(toList());
 
         if (books.size() != 0){
-            if (books.get(0).getBookId().equals(id)){
+            if (books.get(0).getId().equals(id)){
                 return false;
             }else {
                 return true;
@@ -180,7 +182,7 @@ public class BookController {
     public ResponseEntity deleteBook(@RequestParam("id") Long id) {
         List<Book> books = convertBookToList(bookRepository.findAll())
             .parallelStream()
-            .filter(i -> i.getBookId().equals(id))
+            .filter(i -> i.getId().equals(id))
             .collect(toList());
 
         if (!books.get(0).isAvailable()){

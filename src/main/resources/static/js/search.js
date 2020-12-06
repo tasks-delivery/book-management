@@ -1,5 +1,5 @@
-function Book(bookId, name, categories, available) {
-  this.bookId = bookId;
+function Book(id, name, categories, available) {
+  this.id = id;
   this.name = name;
   this.categories = categories;
   this.available = available;
@@ -47,11 +47,11 @@ function removeBook(event){
 
                       for(i = 0; i < books.length; i++){
 
-                         var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
+                         var book = new Book(books[i].id, books[i].name, books[i].categories[0].name, books[i].available);
 
-                         console.log('bookId is ' + book.bookId);
+                         console.log('bookId is ' + book.id);
                          console.log('name is ' + book.name);
-                         console.log('cat is ' + book.categories);
+                         console.log('cat is ' + book.categories[0].name);
                          console.log('ava is ' + book.available);
 
                          renderTable(book)
@@ -74,13 +74,13 @@ function removeBook(event){
 
 }
 
-function renderIcon(available, bookId){
+function renderIcon(available, id){
 		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
         +"<a href='/edit' onclick='storeBookId()'>"
-        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"<img id="+id+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
         +"</a>"
         +"<a onclick='removeBook()'>"
-        +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+        +"<img id="+id+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
         +"</a>";
 	}
 
@@ -94,7 +94,7 @@ function renderIcon(available, bookId){
         cellCategory = document.createElement("td");
         cellAvailable = document.createElement("td");
 
-		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
+		cellAvailable.innerHTML = renderIcon(book.available, book.id);
 
         cellName.setAttribute('class', 'name-cell');
         cellCategory.setAttribute('class', 'category-cell');
@@ -146,11 +146,11 @@ $(document).ready(function() {
   	let json = await response.json();
   	for(i = 0; i < json.length; i++){
 
-		var book = new Book(json[i].bookId, json[i].name, json[i].categories, json[i].available);
+		var book = new Book(json[i].id, json[i].name, json[i].categories[0].name, json[i].available);
 
-  	    console.log('bookId is ' + book.bookId);
+  	    console.log('bookId is ' + book.id);
   	    console.log('name is ' + book.name);
-  	    console.log('cat is ' + book.categories);
+  	    console.log('cat is ' + book.categories[0].name);
   	    console.log('ava is ' + book.available);
 
         renderTable(book)
