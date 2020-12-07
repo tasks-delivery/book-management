@@ -1,5 +1,7 @@
 package book.platform.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,20 +13,18 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class User {
+public class Publisher {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long userId;
+    private Long publisherId;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private Timestamp date;
 
-    private String email;
-
-    public User(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Publisher(String name, Timestamp date){
+        this.name = name;
+        this.date = date;
     }
 }

@@ -11,20 +11,19 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class User {
+public class Location {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long userId;
+    private Long locationId;
 
-    private String firstName;
+    private String variety;
 
-    private String lastName;
+    private String number;
 
-    private String email;
-
-    public User(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Location(String variety, String number){
+        this.variety = variety;
+        this.number = number;
     }
+
 }

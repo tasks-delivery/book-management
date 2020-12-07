@@ -1,5 +1,6 @@
 package book.platform.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,14 +32,30 @@ public class Book {
 
     private String name;
 
+    private Timestamp returnDate;
+
     @Column
     @JsonProperty("categories")
     @ElementCollection(targetClass=String.class)
     private List<String> categories;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    @Column
+    @JsonProperty("authors")
+    @ElementCollection(targetClass=Author.class)
+    private List<Author> authors;
 
     private boolean available;
 
