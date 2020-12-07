@@ -95,7 +95,6 @@ function removeBook(id){
 
 }
 
-
 function renderIcon(available, id){
 		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
         +"<a href='/edit' onclick='storeBookId("+id+")'>"
@@ -176,7 +175,7 @@ $(document).ready(function() {
   	let json = await response.json();
   	for(i = 0; i < json.length; i++){
 
-		var book = new Book(json[i].id, json[i].name, json[i].categories, json[i].available);
+		var book = new Book(json[i].id, json[i].name, json[i].categories[0].name, json[i].available);
 
   	    console.log('bookId is ' + book.id);
   	    console.log('name is ' + book.name);

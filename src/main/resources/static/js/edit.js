@@ -6,14 +6,14 @@ $(document).ready(function() {
 
       bookId = localStorage.getItem("bookId");
       findBookById(bookId);
-
+	  console.log('bookId from localStore is ' + bookId);
  });
 
  async function findBookById(bookId){
 		const endpoint = "/book/" + bookId;
 		let response = await fetch(endpoint);
 		let book = await response.json();
-		console.log('bookId is ' + book.bookId);
+		console.log('bookId is ' + book.id);
 		console.log('name is ' + book.name);
 		console.log('cat is ' + book.categories);
 		console.log('ava is ' + book.available);
@@ -23,7 +23,7 @@ $(document).ready(function() {
 		$("#book-name").val(book.name);
 		$("#first-name").val(book.user.firstName);
 		$("#last-name").val(book.user.lastName);
-		$('#category-selector').val(book.categories[0]);
+		$('#category-selector').val(book.categories[0].name);
 
  }
 
@@ -51,7 +51,10 @@ $(document).ready(function() {
 
    var bookData = {
            name: bookName,
-           categories:categoryList,
+           categories:[{
+                      name:categoryList[0]
+                      }],
+
            user:
                {
                firstName:$("#first-name").val(),

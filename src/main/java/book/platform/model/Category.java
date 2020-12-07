@@ -15,19 +15,16 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class Author extends BaseModel {
+public class Category extends BaseModel {
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @JsonIgnore
     private Book book;
 
-    public Author(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Category(String name){
+        this.name = name;
     }
 }
