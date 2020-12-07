@@ -7,80 +7,101 @@ function Book(id, name, categories, available) {
 
 var books = [];
 
-function storeBookId(event){
+function storeBookId(id){
 
     window.onclick = e => {
-        localStorage.setItem("bookId", e.target.id);
+        localStorage.setItem("bookId", id);
     }
 
 }
 
-function removeBook(event){
+function removeBook(id){
 
-    window.onclick = e => {
+ var table = document.querySelector(".table-separator");
 
-    if(e.target.id.length != 0){
+	  var div = document.querySelector('#ele-overlay');
+	  div.setAttribute('class', 'overlay');
+      table.append(div);
 
-         $.ajax({
-              method: "DELETE",
-              url: "book/?id=" + e.target.id,
-              error: function(er) {
-                console.log(er);
-              },
-               statusCode: {
-                  200: function() {
-                      $('table').html("");
-                      console.log("Book is removed");
+      var dialog = document.getElementById("myDialog");
 
-                      for(i = 0; i < books.length; i++){
+      if(dialog.open == false){
+         dialog.showModal();
+      }
 
-                         if(books[i].bookId == e.target.id){
+	  var btnCancel = document.querySelector("#btn-cancel");
+	  btnCancel.addEventListener("click", function() {
+	    var dialog = document.getElementById("myDialog");
+	    div.style.display = "none";
+        dialog.close();
+	  });
 
-                             var index = books.indexOf(books[i]);
-                             if (index !== -1) {
-                               books.splice(index, 1);
-                               break;
-                             }
+      var btnOk = document.querySelector("#btn-ok");
+      btnOk.addEventListener("click", function() {
 
-                         }
-                      }
+        if(id != 0){
 
-                      for(i = 0; i < books.length; i++){
+                 $.ajax({
+                      method: "DELETE",
+                      url: "book/?id=" + id,
+                      error: function(er) {
+                        console.log(er);
+                      },
+                       statusCode: {
+                          200: function() {
+                              $('table').html("");
+                              console.log("Book is removed");
 
-                         var book = new Book(books[i].id, books[i].name, books[i].categories[0].name, books[i].available);
+                              for(i = 0; i < books.length; i++){
 
-                         console.log('bookId is ' + book.id);
-                         console.log('name is ' + book.name);
-                         console.log('cat is ' + book.categories[0].name);
-                         console.log('ava is ' + book.available);
+                                 if(books[i].id == id){
 
-                         renderTable(book)
+                                     var index = books.indexOf(books[i]);
+                                     if (index !== -1) {
+                                       books.splice(index, 1);
+                                       break;
+                                     }
 
-                      }
+                                 }
+                              }
 
-                  },
-                  400: function() {
-                    throw new Error('Book with user cannot be removed');
-                  },
-                  404: function() {
-                    throw new Error('Book not found');
-                  }
+                              for(i = 0; i < books.length; i++){
+
+                                 var book = new Book(books[i].id, books[i].name, books[i].categories, books[i].available);
+
+                                 console.log('bookId is ' + book.id);
+                                 console.log('name is ' + book.name);
+                                 console.log('cat is ' + book.categories);
+                                 console.log('ava is ' + book.available);
+
+                                 renderTable(book)
+
+                              }
+
+                          },
+                          400: function() {
+                            throw new Error('Book with user cannot be removed');
+                          },
+                          404: function() {
+                            throw new Error('Book not found');
+                          }
+                        }
+                    });
+
                 }
-            });
-
-        }
-
-    }
+         div.style.display = "none";
+         dialog.close();
+      });
 
 }
 
 function renderIcon(available, id){
 		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
-        +"<a href='/edit' onclick='storeBookId()'>"
-        +"<img id="+id+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"<a href='/edit' onclick='storeBookId("+id+")'>"
+        +"<img class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
         +"</a>"
-        +"<a onclick='removeBook()'>"
-        +"<img id="+id+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+        +"<a onclick='removeBook("+id+")'>"
+        +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
         +"</a>";
 	}
 
@@ -115,11 +136,19 @@ function renderIcon(available, id){
         table.appendChild(row);
   }
 
-
 $(document).ready(function() {
 
   $(window).load(function(){
-         findBook("", "");
+
+  var header = document.querySelector("header");
+  var img = document.createElement("img")
+  img.setAttribute('onclick', 'location.href="/book";');
+  img.setAttribute('src', '/asset/admin-icon.png');
+  img.setAttribute('th:src', '@{asset/admin-icon.png}');
+  img.setAttribute('class', 'admin-icon');
+  header.appendChild(img);
+
+  findBook("", "");
   });
 
   $("#bookFilter").click(function(e) {
@@ -150,7 +179,7 @@ $(document).ready(function() {
 
   	    console.log('bookId is ' + book.id);
   	    console.log('name is ' + book.name);
-  	    console.log('cat is ' + book.categories[0].name);
+  	    console.log('cat is ' + book.categories);
   	    console.log('ava is ' + book.available);
 
         renderTable(book)
