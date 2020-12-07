@@ -15,7 +15,7 @@ function storeBookId(event){
 
 }
 
-function removeBook(e){
+function removeBook(bookId){
 
  var table = document.querySelector(".table-separator");
 
@@ -39,11 +39,11 @@ function removeBook(e){
       var btnOk = document.querySelector("#btn-ok");
       btnOk.addEventListener("click", function() {
 
-        if(this.target.id.length != 0){
+        if(bookId != 0){
 
                  $.ajax({
                       method: "DELETE",
-                      url: "book/?id=" + e.target.id,
+                      url: "book/?id=" + bookId,
                       error: function(er) {
                         console.log(er);
                       },
@@ -54,7 +54,7 @@ function removeBook(e){
 
                               for(i = 0; i < books.length; i++){
 
-                                 if(books[i].bookId == e.target.id){
+                                 if(books[i].bookId == bookId){
 
                                      var index = books.indexOf(books[i]);
                                      if (index !== -1) {
@@ -101,7 +101,7 @@ function renderIcon(available, bookId){
         +"<a href='/edit' onclick='storeBookId()'>"
         +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
         +"</a>"
-        +"<a onclick='removeBook()'>"
+        +"<a onclick='removeBook("+bookId+")'>"
         +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
         +"</a>";
 	}
@@ -136,7 +136,6 @@ function renderIcon(available, bookId){
 
         table.appendChild(row);
   }
-
 
 $(document).ready(function() {
 
