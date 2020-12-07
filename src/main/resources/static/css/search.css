@@ -164,6 +164,7 @@ td {
 }
 
 .dialog-box {
+  border: 0;
   opacity: 1;
   background-color: #F7FFFB;
   border-radius: 10px;
@@ -193,4 +194,5 @@ td {
   display: flex;
   justify-content: center;
   margin-top: 25%;
+  color: white;
 }

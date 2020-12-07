@@ -1,5 +1,5 @@
-function Book(bookId, name, categories, available) {
-  this.bookId = bookId;
+function Book(id, name, categories, available) {
+  this.id = id;
   this.name = name;
   this.categories = categories;
   this.available = available;
@@ -7,15 +7,15 @@ function Book(bookId, name, categories, available) {
 
 var books = [];
 
-function storeBookId(event){
+function storeBookId(id){
 
     window.onclick = e => {
-        localStorage.setItem("bookId", e.target.id);
+        localStorage.setItem("bookId", id);
     }
 
 }
 
-function removeBook(bookId){
+function removeBook(id){
 
  var table = document.querySelector(".table-separator");
 
@@ -39,11 +39,11 @@ function removeBook(bookId){
       var btnOk = document.querySelector("#btn-ok");
       btnOk.addEventListener("click", function() {
 
-        if(bookId != 0){
+        if(id != 0){
 
                  $.ajax({
                       method: "DELETE",
-                      url: "book/?id=" + bookId,
+                      url: "book/?id=" + id,
                       error: function(er) {
                         console.log(er);
                       },
@@ -54,7 +54,7 @@ function removeBook(bookId){
 
                               for(i = 0; i < books.length; i++){
 
-                                 if(books[i].bookId == bookId){
+                                 if(books[i].id == id){
 
                                      var index = books.indexOf(books[i]);
                                      if (index !== -1) {
@@ -67,9 +67,9 @@ function removeBook(bookId){
 
                               for(i = 0; i < books.length; i++){
 
-                                 var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
+                                 var book = new Book(books[i].id, books[i].name, books[i].categories, books[i].available);
 
-                                 console.log('bookId is ' + book.bookId);
+                                 console.log('bookId is ' + book.id);
                                  console.log('name is ' + book.name);
                                  console.log('cat is ' + book.categories);
                                  console.log('ava is ' + book.available);
@@ -96,13 +96,13 @@ function removeBook(bookId){
 }
 
 
-function renderIcon(available, bookId){
+function renderIcon(available, id){
 		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
-        +"<a href='/edit' onclick='storeBookId()'>"
-        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"<a href='/edit' onclick='storeBookId("+id+")'>"
+        +"<img class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
         +"</a>"
-        +"<a onclick='removeBook("+bookId+")'>"
-        +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+        +"<a onclick='removeBook("+id+")'>"
+        +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
         +"</a>";
 	}
 
@@ -116,7 +116,7 @@ function renderIcon(available, bookId){
         cellCategory = document.createElement("td");
         cellAvailable = document.createElement("td");
 
-		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
+		cellAvailable.innerHTML = renderIcon(book.available, book.id);
 
         cellName.setAttribute('class', 'name-cell');
         cellCategory.setAttribute('class', 'category-cell');
@@ -176,9 +176,9 @@ $(document).ready(function() {
   	let json = await response.json();
   	for(i = 0; i < json.length; i++){
 
-		var book = new Book(json[i].bookId, json[i].name, json[i].categories, json[i].available);
+		var book = new Book(json[i].id, json[i].name, json[i].categories, json[i].available);
 
-  	    console.log('bookId is ' + book.bookId);
+  	    console.log('bookId is ' + book.id);
   	    console.log('name is ' + book.name);
   	    console.log('cat is ' + book.categories);
   	    console.log('ava is ' + book.available);

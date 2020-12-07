@@ -83,7 +83,7 @@ public class BookController {
         if (!oldBook.isPresent()){
             return ResponseEntity.notFound().build();
         }else {
-            book.setBookId(oldBook.get().getBookId());
+            book.setId(oldBook.get().getId());
         }
 
         if (StringUtils.isBlank(book.getName())){
@@ -105,7 +105,7 @@ public class BookController {
         if (categoryIsExists(book)){
 
            if (book != oldBook.get()){
-               Boolean duplicate = isDuplicate(oldBook.get().getBookId(), book.getName(), book.getCategories());
+               Boolean duplicate = isDuplicate(oldBook.get().getId(), book.getName(), book.getCategories());
 
                if (!duplicate){
                    bookRepository.save(book);
@@ -151,7 +151,7 @@ public class BookController {
             .collect(toList());
 
         if (books.size() != 0){
-            if (books.get(0).getBookId().equals(id)){
+            if (books.get(0).getId().equals(id)){
                 return false;
             }else {
                 return true;
@@ -180,7 +180,7 @@ public class BookController {
     public ResponseEntity deleteBook(@RequestParam("id") Long id) {
         List<Book> books = convertBookToList(bookRepository.findAll())
             .parallelStream()
-            .filter(i -> i.getBookId().equals(id))
+            .filter(i -> i.getId().equals(id))
             .collect(toList());
 
         if (!books.get(0).isAvailable()){
