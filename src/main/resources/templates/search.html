@@ -53,11 +53,18 @@
 					<div id="ele-overlay"></div>
 
 					<div id="dialog-container">
-						<dialog id="myDialog" class="dialog-box">
+						<dialog id="remove-dialog" class="dialog-box">
 							<p class='dialog-title'>Do you want to delete the book?</p>
 							<p class='dialog-btn-container'>
 								<button type='button' id="btn-ok" class='btn-dialog'>OK</button>
 								<button type='button' id="btn-cancel" class='btn-dialog'>CANCEL</button>
+							</p>
+						</dialog>
+
+						<dialog id="remove-alert" class="dialog-box">
+							<p class='dialog-title'>You cannot delete a book that has a user</p>
+							<p class='dialog-btn-container'>
+								<button type='button' id="btn-ok-second" class='btn-dialog'>OK</button>
 							</p>
 						</dialog>
 					</div>

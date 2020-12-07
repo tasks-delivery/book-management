@@ -23,7 +23,31 @@ function removeBook(id){
 	  div.setAttribute('class', 'overlay');
       table.append(div);
 
-      var dialog = document.getElementById("myDialog");
+      for(i = 0; i < books.length; i++){
+
+        if(books[i].id == id){
+
+            if(books[i].available == false){
+
+                  var alert = document.getElementById("remove-alert");
+
+                    if(alert.open == false){
+                       alert.showModal();
+                    }
+
+                    var btnOkSecond = document.querySelector("#btn-ok-second");
+                    	  btnOkSecond.addEventListener("click", function() {
+                    	    div.style.display = "none";
+                            alert.close();
+                    	  });
+				throw new Error('Book with user cannot be removed');
+            }
+
+        }
+
+      }
+
+      var dialog = document.getElementById("remove-dialog");
 
       if(dialog.open == false){
          dialog.showModal();
@@ -31,7 +55,6 @@ function removeBook(id){
 
 	  var btnCancel = document.querySelector("#btn-cancel");
 	  btnCancel.addEventListener("click", function() {
-	    var dialog = document.getElementById("myDialog");
 	    div.style.display = "none";
         dialog.close();
 	  });
@@ -80,7 +103,9 @@ function removeBook(id){
 
                           },
                           400: function() {
-                            throw new Error('Book with user cannot be removed');
+
+
+
                           },
                           404: function() {
                             throw new Error('Book not found');
