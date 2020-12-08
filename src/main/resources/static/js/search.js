@@ -193,7 +193,7 @@ $(document).ready(function() {
 
   $('table').html("");
 
-  console.log('filtered name is ' + + name);
+  console.log('filtered name is ' + name);
 
   const endpoint = "/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
