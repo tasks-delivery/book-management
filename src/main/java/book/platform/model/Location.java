@@ -13,20 +13,19 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class User extends BaseModel{
+public class Location extends BaseModel {
 
-    private String firstName;
+    private String variety;
 
-    private String lastName;
+    private String number;
 
-    private String email;
-
-    @OneToOne(optional=false, mappedBy="user")
+    @OneToOne(optional=false, mappedBy="location")
     @JsonIgnore
     private Book book;
 
-    public User(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Location(String variety, String number){
+        this.variety = variety;
+        this.number = number;
     }
+
 }

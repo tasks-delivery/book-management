@@ -1,0 +1,41 @@
+<div class="book-container">
+
+	<div class="book-container">
+		<div class="section-name">Book info</div>
+		<div class="section-separator"></div>
+		<div class="element-box">
+			<div class="box">
+				<input id="book-name" type="text" class="field" placeholder="Name">
+				<div class="category-tab-box">
+					<select id="category-selector" class="drop-down">
+						<option value="">Category</option>
+						<option>Detective fiction</option>
+						<option>Fantasy</option>
+						<option>Science fiction</option>
+						<option>Dictionary</option>
+					</select>
+					<!--
+					<div class="tag-box">
+						<span class="tag-name">Detective fiction</span>
+					</div>
+					-->
+				</div>
+			</div>
+			<div class="description">Describe the book you want to add, starting with the title and choosing a category. The title of the book must be unique.</div>
+		</div>
+	</div>
+	<div class="user-container">
+		<div class="section-name">User info</div>
+		<div class="section-separator"></div>
+		<div class="element-box">
+			<div class="box">
+				<input type="text" class="field" id="first-name" placeholder="First name">
+				<input type="text" class="field" id="last-name" placeholder="Last name">
+			</div>
+			<div class="description">The book may be in the possession of some person, so you need to fill in the name and surname of the person who currently has the book.
+				If the user does not have the book yet, then the fields can be left blank.
+			</div>
+		</div>
+	</div>
+	<input id="bookSubmit" class="button" type="button" value="Submit"/>
+</div>

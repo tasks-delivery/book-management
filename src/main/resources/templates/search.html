@@ -4,23 +4,17 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Book Platform</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"  rel = "stylesheet">
+	<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 	<link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
 	<link href="../static/css/header.css" th:href="@{/css/header.css}" rel="stylesheet" />
 	<link href="../static/css/search.css" th:href="@{/css/search.css}" rel="stylesheet" />
 	<script type="text/javascript" th:src="@{/js/search.js}" src="../static/js/search.js"></script>
 </head>
 	<body>
-	<header class="header">
-		<img onclick="location.href='/';" src="..static/asset/back-arrow.png" th:src="@{asset/back-arrow.png}" class="back-arrow"/>
-		<div class="header-btn-container">
-			<div class="header-btn">Home</div>
-			<div class="header-btn">About</div>
-			<div class="header-btn">Features</div>
-			<div class="header-btn">Pricing</div>
-			<div class="header-btn">Contact us</div>
-		</div>
-		<img onclick="location.href='/book';" src="..static/asset/admin-icon.png" th:src="@{asset/admin-icon.png}" class="admin-icon"/>
-	</header>
+	<div th:insert="header :: header">...</div>
+
 		<div class="search-container">
 
 			<div class="page-info-box">
@@ -54,20 +48,34 @@
 					<div class="cell-title-availability">Availability </div>
 				</div>
 
-				<div class="table-separator"></div>
+				<div class="table-separator">
 
-				<table id="grid">
-					<!--
-					<tr>
-						<td class="name-cell">First Book</td>
-						<td class="category-cell">Fantasy</td>
-						<td class="available-cell"></td>
-					</tr>
-					-->
-				</table>
+					<div id="ele-overlay"></div>
+
+					<div id="dialog-container">
+						<dialog id="remove-dialog" class="dialog-box">
+							<p class='dialog-title'>Do you want to delete the book?</p>
+							<p class='dialog-btn-container'>
+								<button type='button' id="btn-ok" class='btn-dialog'>OK</button>
+								<button type='button' id="btn-cancel" class='btn-dialog'>CANCEL</button>
+							</p>
+						</dialog>
+
+						<dialog id="remove-alert" class="dialog-box">
+							<p class='dialog-title'>You cannot delete a book that has a user</p>
+							<p class='dialog-btn-container'>
+								<button type='button' id="btn-ok-second" class='btn-dialog'>OK</button>
+							</p>
+						</dialog>
+					</div>
+
+				</div>
+
+				<table id="grid"></table>
 
 			</div>
 
 		</div>
+
 	</body>
 </html>

@@ -1,5 +1,7 @@
 package book.platform.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -13,20 +15,18 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class User extends BaseModel{
+public class Publisher extends BaseModel {
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private Timestamp date;
 
-    private String email;
-
-    @OneToOne(optional=false, mappedBy="user")
+    @OneToOne(optional=false, mappedBy="publisher")
     @JsonIgnore
     private Book book;
 
-    public User(String firstName, String lastName){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Publisher(String name, Timestamp date){
+        this.name = name;
+        this.date = date;
     }
 }

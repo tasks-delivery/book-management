@@ -1,7 +1,9 @@
 package book.platform.model;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,19 +15,18 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class User extends BaseModel{
+public class Author extends BaseModel {
 
     private String firstName;
 
     private String lastName;
 
-    private String email;
-
-    @OneToOne(optional=false, mappedBy="user")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     @JsonIgnore
     private Book book;
 
-    public User(String firstName, String lastName){
+    public Author(String firstName, String lastName){
         this.firstName = firstName;
         this.lastName = lastName;
     }
