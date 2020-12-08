@@ -200,7 +200,7 @@ public class BookController {
         if (!categories.isEmpty()){
             if (!categories.get(0).isEmpty()){
                 books = books.stream()
-                    .filter(i -> i.getCategories().containsAll(categories))
+                    .filter(i -> i.getCategories().stream().map(Category::getName).collect(toList()).containsAll(categories))
                     .collect(toList());
             }
         }
