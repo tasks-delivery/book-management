@@ -43,6 +43,10 @@ public class Book {
     @JoinColumn (name="location_id")
     private Location location;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="book_id")
+    private List<BookType> bookTypes;
+
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;

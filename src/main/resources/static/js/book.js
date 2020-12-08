@@ -40,6 +40,12 @@
                 number:'2'
                 },
 
+//TODO: Fake book location data, should be replaced to final solution in future.
+            bookTypes:
+                [{
+                name:'Free book'
+                }],
+
 //TODO: Fake publisher data, should be replaced to final solution in future.
             publisher:
                 {
