@@ -3,12 +3,22 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Book Platform</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-	<link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
+	<link href="../static/css/contact.css" th:href="@{/css/contact.css}" rel="stylesheet" />
 	<link href="../static/css/header.css" th:href="@{/css/header.css}" rel="stylesheet" />
-	<script type="text/javascript" th:src="@{/js/book.js}" src="../static/js/book.js"></script>
 </head>
 	<body>
 	<div th:insert="header :: header">...</div>
+
+	<div class="contact-box">
+		<h2>Address</h2>
+		<div>Независимости 56</div>
+
+		<h2>Phone number</h2>
+		<div>+375(29)111-11-11</div>
+
+		<h2>Map</h2>
+		<img src="..static/asset/contact-map.png" th:src="@{asset/contact-map.png}" class="contact-map"/>
+	</div>
+
 	</body>
 </html>
