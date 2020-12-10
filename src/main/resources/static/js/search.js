@@ -212,6 +212,8 @@ $(document).ready(function() {
   	let response = await fetch(endpoint);
   	let json = await response.json();
 
+  	$('#initState').html("<div class='content-loading'></div>");
+
   	for(i = 0; i < json.length; i++){
 
 		var book = new Book(json[i].id, json[i].name, json[i].categories[0].name, json[i].available);
@@ -226,8 +228,6 @@ $(document).ready(function() {
   	    books.push(book);
 
   	}
-
-  	$('#initState').html("<div class='content-loading'></div>");
 
   	console.log('books are ' + books);
   }
