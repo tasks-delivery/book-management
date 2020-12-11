@@ -15,7 +15,7 @@ function storeBookId(event){
 
 }
 
-function removeBook(e){
+function removeBook(bookId){
 
  var table = document.querySelector(".table-separator");
 
@@ -43,7 +43,7 @@ function removeBook(e){
 
                  $.ajax({
                       method: "DELETE",
-                      url: "book/?id=" + e.target.id,
+                      url: "book/?id=" +bookId,
                       error: function(er) {
                         console.log(er);
                       },
@@ -95,13 +95,64 @@ function removeBook(e){
 
 }
 
+function deleteBook(bookId){
+  $.ajax({
+    method: "DELETE",
+    url: "book/?id=" +bookId,
+    error: function(er) {
+      console.log(er);
+    },
+    // statusCode: {
+    //   200: function() {
+    //     $('table').html("");
+    //     console.log("Book is removed");
+    //
+    //     for(i = 0; i < books.length; i++){
+    //
+    //       if(books[i].bookId == e.target.id){
+    //
+    //         var index = books.indexOf(books[i]);
+    //         if (index !== -1) {
+    //           books.splice(index, 1);
+    //           break;
+    //         }
+    //
+    //       }
+    //     }
+    //
+    //     for(i = 0; i < books.length; i++){
+    //
+    //       var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
+    //
+    //       console.log('bookId is ' + book.bookId);
+    //       console.log('name is ' + book.name);
+    //       console.log('cat is ' + book.categories);
+    //       console.log('ava is ' + book.available);
+    //
+    //       renderTable(book)
+    //
+    //     }
+    //
+    //   },
+    //   400: function() {
+    //     throw new Error('Book with user cannot be removed');
+    //   },
+    //   404: function() {
+    //     throw new Error('Book not found');
+    //   }
+    // }
+  });
+}
+
 
 function renderIcon(available, bookId){
+
+
 		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
         +"<a href='/edit' onclick='storeBookId()'>"
         +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
         +"</a>"
-        +"<a onclick='removeBook()'>"
+        +"<a onclick='removeBook(bookId)'>"
         +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
         +"</a>";
 	}
