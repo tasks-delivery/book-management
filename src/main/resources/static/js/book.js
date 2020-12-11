@@ -23,12 +23,42 @@
 
 	var bookData = {
             name: bookName,
-            categories:categoryList,
+            categories:[{
+                       name:categoryList[0]
+                       }],
+
             user:
                 {
                 firstName:$("#first-name").val(),
                 lastName:$("#last-name").val()
-                }
+                },
+
+//TODO: Fake book location data, should be replaced to final solution in future.
+            location:
+                {
+                variety:'A',
+                number:'2'
+                },
+
+//TODO: Fake book location data, should be replaced to final solution in future.
+            bookTypes:
+                [{
+                name:'Free book'
+                }],
+
+//TODO: Fake publisher data, should be replaced to final solution in future.
+            publisher:
+                {
+                name:'Publisher Home At Moscow',
+                date:'2020-12-06 20:21:34.231'
+                },
+
+//TODO: Fake author data, should be replaced to final solution in future.
+            authors:
+            [{
+            firstName:'First name test',
+            lastName:'Last name test'
+            }]
         }
 
     console.log(bookData);

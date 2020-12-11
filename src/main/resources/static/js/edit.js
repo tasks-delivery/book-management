@@ -6,14 +6,14 @@ $(document).ready(function() {
 
       bookId = localStorage.getItem("bookId");
       findBookById(bookId);
-
+	  console.log('bookId from localStore is ' + bookId);
  });
 
  async function findBookById(bookId){
 		const endpoint = "/book/" + bookId;
 		let response = await fetch(endpoint);
 		let book = await response.json();
-		console.log('bookId is ' + book.bookId);
+		console.log('bookId is ' + book.id);
 		console.log('name is ' + book.name);
 		console.log('cat is ' + book.categories);
 		console.log('ava is ' + book.available);
@@ -23,7 +23,7 @@ $(document).ready(function() {
 		$("#book-name").val(book.name);
 		$("#first-name").val(book.user.firstName);
 		$("#last-name").val(book.user.lastName);
-		$('#category-selector').val(book.categories[0]);
+		$('#category-selector').val(book.categories[0].name);
 
  }
 
@@ -51,12 +51,42 @@ $(document).ready(function() {
 
    var bookData = {
            name: bookName,
-           categories:categoryList,
+           categories:[{
+                      name:categoryList[0]
+                      }],
+
            user:
                {
                firstName:$("#first-name").val(),
                lastName:$("#last-name").val()
-               }
+               },
+
+//TODO: Fake book location data, should be replaced to final solution in future.
+            location:
+                {
+                variety:'A',
+                number:'2'
+                },
+
+//TODO: Fake book location data, should be replaced to final solution in future.
+            bookTypes:
+                [{
+                name:'Free book'
+                }],
+
+//TODO: Fake publisher data, should be replaced to final solution in future.
+            publisher:
+                {
+                name:'Publisher Home At Moscow',
+                date:'2020-12-06 20:21:34.231'
+                },
+
+//TODO: Fake author data, should be replaced to final solution in future.
+            authors:
+            [{
+            firstName:'First name test',
+            lastName:'Last name test'
+            }]
    }
 
    console.log(bookData);

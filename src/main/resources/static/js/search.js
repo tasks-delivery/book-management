@@ -1,5 +1,12 @@
-function Book(bookId, name, categories, available) {
-  this.bookId = bookId;
+paceOptions = {
+  elements: {
+    checkInterval: 100,
+    selectors: ['.content-loading']
+  }
+}
+
+function Book(id, name, categories, available) {
+  this.id = id;
   this.name = name;
   this.categories = categories;
   this.available = available;
@@ -7,15 +14,15 @@ function Book(bookId, name, categories, available) {
 
 var books = [];
 
-function storeBookId(event){
+function storeBookId(id){
 
     window.onclick = e => {
-        localStorage.setItem("bookId", e.target.id);
+        localStorage.setItem("bookId", id);
     }
 
 }
 
-function removeBook(bookId){
+function removeBook(id){
 
  var table = document.querySelector(".table-separator");
 
@@ -23,7 +30,31 @@ function removeBook(bookId){
 	  div.setAttribute('class', 'overlay');
       table.append(div);
 
-      var dialog = document.getElementById("myDialog");
+      for(i = 0; i < books.length; i++){
+
+        if(books[i].id == id){
+
+            if(books[i].available == false){
+
+                  var alert = document.getElementById("remove-alert");
+
+                    if(alert.open == false){
+                       alert.showModal();
+                    }
+
+                    var btnOkSecond = document.querySelector("#btn-ok-second");
+                    	  btnOkSecond.addEventListener("click", function() {
+                    	    div.style.display = "none";
+                            alert.close();
+                    	  });
+				throw new Error('Book with user cannot be removed');
+            }
+
+        }
+
+      }
+
+      var dialog = document.getElementById("remove-dialog");
 
       if(dialog.open == false){
          dialog.showModal();
@@ -31,7 +62,6 @@ function removeBook(bookId){
 
 	  var btnCancel = document.querySelector("#btn-cancel");
 	  btnCancel.addEventListener("click", function() {
-	    var dialog = document.getElementById("myDialog");
 	    div.style.display = "none";
         dialog.close();
 	  });
@@ -39,11 +69,12 @@ function removeBook(bookId){
       var btnOk = document.querySelector("#btn-ok");
       btnOk.addEventListener("click", function() {
 
-        if(this.target.id.length != 0){
+        if(id != 0){
+			Pace.track(function(){
 
                  $.ajax({
                       method: "DELETE",
-                      url: "book/?id=" +bookId,
+                      url: "book/?id=" + id,
                       error: function(er) {
                         console.log(er);
                       },
@@ -54,7 +85,7 @@ function removeBook(bookId){
 
                               for(i = 0; i < books.length; i++){
 
-                                 if(books[i].bookId == e.target.id){
+                                 if(books[i].id == id){
 
                                      var index = books.indexOf(books[i]);
                                      if (index !== -1) {
@@ -67,9 +98,9 @@ function removeBook(bookId){
 
                               for(i = 0; i < books.length; i++){
 
-                                 var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
+                                 var book = new Book(books[i].id, books[i].name, books[i].categories, books[i].available);
 
-                                 console.log('bookId is ' + book.bookId);
+                                 console.log('bookId is ' + book.id);
                                  console.log('name is ' + book.name);
                                  console.log('cat is ' + book.categories);
                                  console.log('ava is ' + book.available);
@@ -80,7 +111,9 @@ function removeBook(bookId){
 
                           },
                           400: function() {
-                            throw new Error('Book with user cannot be removed');
+
+
+
                           },
                           404: function() {
                             throw new Error('Book not found');
@@ -88,6 +121,7 @@ function removeBook(bookId){
                         }
                     });
 
+			});
                 }
          div.style.display = "none";
          dialog.close();
@@ -95,65 +129,13 @@ function removeBook(bookId){
 
 }
 
-function deleteBook(bookId){
-  $.ajax({
-    method: "DELETE",
-    url: "book/?id=" +bookId,
-    error: function(er) {
-      console.log(er);
-    },
-    // statusCode: {
-    //   200: function() {
-    //     $('table').html("");
-    //     console.log("Book is removed");
-    //
-    //     for(i = 0; i < books.length; i++){
-    //
-    //       if(books[i].bookId == e.target.id){
-    //
-    //         var index = books.indexOf(books[i]);
-    //         if (index !== -1) {
-    //           books.splice(index, 1);
-    //           break;
-    //         }
-    //
-    //       }
-    //     }
-    //
-    //     for(i = 0; i < books.length; i++){
-    //
-    //       var book = new Book(books[i].bookId, books[i].name, books[i].categories, books[i].available);
-    //
-    //       console.log('bookId is ' + book.bookId);
-    //       console.log('name is ' + book.name);
-    //       console.log('cat is ' + book.categories);
-    //       console.log('ava is ' + book.available);
-    //
-    //       renderTable(book)
-    //
-    //     }
-    //
-    //   },
-    //   400: function() {
-    //     throw new Error('Book with user cannot be removed');
-    //   },
-    //   404: function() {
-    //     throw new Error('Book not found');
-    //   }
-    // }
-  });
-}
-
-
-function renderIcon(available, bookId){
-
-
+function renderIcon(available, id){
 		return "<img class='book-status-img' src='/asset/"+available+".png' th:src='@{asset/"+available+".png}'/>"
-        +"<a href='/edit' onclick='storeBookId()'>"
-        +"<img id="+bookId+" class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
+        +"<a href='/edit' onclick='storeBookId("+id+")'>"
+        +"<img class='edit-book-img' src='/asset/edit-icon.png' th:src='@{asset/edit-icon.png}'/>"
         +"</a>"
-        +"<a onclick='removeBook(bookId)'>"
-        +"<img id="+bookId+" class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
+        +"<a onclick='removeBook("+id+")'>"
+        +"<img class='remove-book-img' src='/asset/delete-icon.png' th:src='@{asset/delete-icon.png}'/>"
         +"</a>";
 	}
 
@@ -167,7 +149,7 @@ function renderIcon(available, bookId){
         cellCategory = document.createElement("td");
         cellAvailable = document.createElement("td");
 
-		cellAvailable.innerHTML = renderIcon(book.available, book.bookId);
+		cellAvailable.innerHTML = renderIcon(book.available, book.id);
 
         cellName.setAttribute('class', 'name-cell');
         cellCategory.setAttribute('class', 'category-cell');
@@ -187,7 +169,6 @@ function renderIcon(available, bookId){
 
         table.appendChild(row);
   }
-
 
 $(document).ready(function() {
 
@@ -219,18 +200,25 @@ $(document).ready(function() {
 
   async function findBook(categories, name) {
 
-  $('table').html("");
+    $('table').html("");
 
-  console.log('filtered name is ' + + name);
+    $('#initState').html("<div class='overlay'></div>");
 
-  const endpoint = "/books/?categories=" + categories + "&name=" + name;
+    Pace.restart();
+
+    console.log('filtered name is ' + name);
+
+    const endpoint = "/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
   	let json = await response.json();
+
+  	$('#initState').html("<div class='content-loading'></div>");
+
   	for(i = 0; i < json.length; i++){
 
-		var book = new Book(json[i].bookId, json[i].name, json[i].categories, json[i].available);
+		var book = new Book(json[i].id, json[i].name, json[i].categories[0].name, json[i].available);
 
-  	    console.log('bookId is ' + book.bookId);
+  	    console.log('bookId is ' + book.id);
   	    console.log('name is ' + book.name);
   	    console.log('cat is ' + book.categories);
   	    console.log('ava is ' + book.available);
@@ -242,7 +230,6 @@ $(document).ready(function() {
   	}
 
   	console.log('books are ' + books);
-
   }
 
 });

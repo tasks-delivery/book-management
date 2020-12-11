@@ -8,7 +8,7 @@ public class JsonUtil {
     public static <T> Object jsonToObject(String json, Class<T> clazz) {
         if (json == null)
             throw new IllegalArgumentException("null cannot be converted to Object");
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("dd-MMM-yyyy").create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         return gson.fromJson(json, clazz);
     }
 }

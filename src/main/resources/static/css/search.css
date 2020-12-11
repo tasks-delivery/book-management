@@ -164,6 +164,7 @@ td {
 }
 
 .dialog-box {
+  border: 0;
   opacity: 1;
   background-color: #F7FFFB;
   border-radius: 10px;
@@ -177,7 +178,7 @@ td {
   font-family: Lato;
   font-size: 20px;
   line-height: 26px;
-  text-align: left;
+  text-align: center;
 }
 
 .btn-dialog {
@@ -185,4 +186,13 @@ td {
   border-radius: 5px;
   width: 192px;
   height: 50px;
+  margin-right: 3%;
+  margin-left: 3%;
+  color: white;
+}
+
+.dialog-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 25%;
 }
