@@ -1,3 +1,10 @@
+paceOptions = {
+  elements: {
+    checkInterval: 100,
+    selectors: ['.content-loading']
+  }
+}
+
 function Book(id, name, categories, available) {
   this.id = id;
   this.name = name;
@@ -63,6 +70,7 @@ function removeBook(id){
       btnOk.addEventListener("click", function() {
 
         if(id != 0){
+			Pace.track(function(){
 
                  $.ajax({
                       method: "DELETE",
@@ -113,6 +121,7 @@ function removeBook(id){
                         }
                     });
 
+			});
                 }
          div.style.display = "none";
          dialog.close();
@@ -191,13 +200,20 @@ $(document).ready(function() {
 
   async function findBook(categories, name) {
 
-  $('table').html("");
+    $('table').html("");
 
-  console.log('filtered name is ' + name);
+    $('#initState').html("<div class='overlay'></div>");
 
-  const endpoint = "/books/?categories=" + categories + "&name=" + name;
+    Pace.restart();
+
+    console.log('filtered name is ' + name);
+
+    const endpoint = "/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
   	let json = await response.json();
+
+  	$('#initState').html("<div class='content-loading'></div>");
+
   	for(i = 0; i < json.length; i++){
 
 		var book = new Book(json[i].id, json[i].name, json[i].categories[0].name, json[i].available);
@@ -214,7 +230,6 @@ $(document).ready(function() {
   	}
 
   	console.log('books are ' + books);
-
   }
 
 });
