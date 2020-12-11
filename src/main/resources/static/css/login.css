@@ -1,3 +1,16 @@
+    .login-container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 5rem;
+        }
+        .link-registration{
+            text-decoration: none;
+            color: deepskyblue;
+            padding: 0;
+            margin:0;
+        }
+
 div.login-container {
     position: absolute;
     top: 0;
