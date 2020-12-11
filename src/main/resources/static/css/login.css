@@ -1,8 +1,8 @@
 .login-container{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-top: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5rem;
 }
 .link-registration{
     text-decoration: none;

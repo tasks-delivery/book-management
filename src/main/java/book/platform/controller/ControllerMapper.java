@@ -21,6 +21,11 @@ public class ControllerMapper {
         return "book";
     }
 
+    @RequestMapping(value = "/registration")
+    public String getRegistration() {
+        return "registration";
+    }
+
     @RequestMapping(value = "/edit")
     public String getEditBook() {
         return "edit";
