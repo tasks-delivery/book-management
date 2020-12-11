@@ -9,6 +9,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
 <body>
+
+<style th:inline="text">
+			body{
+			    background: url([[@{/asset/login-font.png}]])
+			                no-repeat center center fixed;
+			    background-position="fixed";
+			    background-size: cover;
+			    width: 100%;
+			    height: 100%;
+			    position: absolute;
+			    top: 0;
+			    left: 0;
+			    overflow: auto;
+
+			}  overflow: hidden;
+		</style>
+
     <div class="row login-container">
         <form  class="col s12">
             <div class="col s3"></div>
@@ -59,7 +76,7 @@
                         </div>
                         <div class="col s6">
                             <div class="input-field col s12 right-align">
-                                <a href="/" class="waves-effect waves-light btn">Create</a>
+                                <a href="/" class="waves-effect waves-light btn grey">Create</a>
                             </div>
                         </div>
                     </div>
