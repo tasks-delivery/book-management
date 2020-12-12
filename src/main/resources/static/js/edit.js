@@ -10,7 +10,7 @@ $(document).ready(function() {
  });
 
  async function findBookById(bookId){
-		const endpoint = "/book/" + bookId;
+		const endpoint = "api/book/" + bookId;
 		let response = await fetch(endpoint);
 		let book = await response.json();
 		console.log('bookId is ' + book.id);
@@ -92,7 +92,7 @@ $(document).ready(function() {
    console.log(bookData);
    $.ajax({
          method: "PUT",
-         url: "book/" + bookId,
+         url: "api/book/" + bookId,
          dataType: "json",
          contentType: 'application/json',
          data: JSON.stringify(bookData),

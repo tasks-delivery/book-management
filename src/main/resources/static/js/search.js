@@ -74,7 +74,7 @@ function removeBook(id){
 
                  $.ajax({
                       method: "DELETE",
-                      url: "book/?id=" + id,
+                      url: "api/book/?id=" + id,
                       error: function(er) {
                         console.log(er);
                       },
@@ -176,7 +176,7 @@ $(document).ready(function() {
 
   var header = document.querySelector("header");
   var img = document.createElement("img")
-  img.setAttribute('onclick', 'location.href="/book";');
+  img.setAttribute('onclick', 'location.href="/add";');
   img.setAttribute('src', '/asset/admin-icon.png');
   img.setAttribute('th:src', '@{asset/admin-icon.png}');
   img.setAttribute('class', 'admin-icon');
@@ -208,7 +208,7 @@ $(document).ready(function() {
 
     console.log('filtered name is ' + name);
 
-    const endpoint = "/books/?categories=" + categories + "&name=" + name;
+    const endpoint = "api/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
   	let json = await response.json();
 

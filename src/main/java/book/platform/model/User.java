@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User extends BaseModel{
 
+    private String login;
+
+    private String password;
+
     private String firstName;
 
     private String lastName;

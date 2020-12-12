@@ -3,10 +3,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Book Platform</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/login.js}" src="../static/js/login.js"></script>
 </head>
 	<body>
 
@@ -54,13 +55,13 @@
 							<div class="col s6 ">
 								<div class="input-field col s12 left-align">
 									<div>
-										<a href="/registration" style="cursor: pointer" class="link-registration">Registration</a>
+										<a href="/register" style="cursor: pointer" class="link-registration">Registration</a>
 									</div>
 								</div>
 							</div>
 							<div class="col s6">
 								<div class="input-field col s12 right-align">
-									<a href="/search" class="waves-effect waves-light btn grey">Sign In</a>
+									<a href="/search" id="login-btn" class="waves-effect waves-light btn grey">Sign In</a>
 								</div>
 							</div>
 						</div>
