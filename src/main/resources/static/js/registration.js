@@ -26,7 +26,6 @@ $(document).ready(function() {
         for(i = 0; i < fields.length; i ++){
 
             if(fields[i].val().length == 0){
-             console.log("wrong field")
                  fields[i].parent().append('<span class="helper-text">Field is required</span>');
                  formIsValida = false;
             }
@@ -43,8 +42,6 @@ $(document).ready(function() {
             login:login.val(),
             password:password.val()
         }
-
-    console.log(userData);
 
     $.ajax({
          method: "POST",
