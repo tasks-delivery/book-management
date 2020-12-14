@@ -10,3 +10,8 @@
     padding: 0;
     margin:0;
 }
+
+.helper-text {
+	#visibility:hidden;
+	color: red !important;
+}

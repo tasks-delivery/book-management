@@ -11,6 +11,7 @@ import book.platform.util.JsonUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,20 @@ public class AuthController {
     public ResponseEntity createUser(@RequestBody String body) {
         User user = (User) JsonUtil.jsonToObject(body, User.class);
 
+        int userValidation = user.getFirstName().length() + user.getLastName().length() + user.getLogin().length() + user.getPassword().length();
+
+        if (userValidation == 0){
+            return ResponseEntity.badRequest()
+                .body("All fields are mandatory");
+        }
+
+        User requestedUser = userRepository.findUserByLogin(user.getLogin());
+
+        if (requestedUser != null){
+            return ResponseEntity.badRequest()
+                .body("User already exists");
+        }
+
         userRepository.save(user);
 
         return ResponseEntity.ok(HttpStatus.OK);
@@ -49,10 +64,20 @@ public class AuthController {
     public LoginResponse login(@RequestBody String body) throws ServletException {
         User user = (User) JsonUtil.jsonToObject(body, User.class);
 
+        int userValidation = user.getLogin().length() + user.getPassword().length();
+
+        if (userValidation == 0){
+            throw new ServletException("All fields are mandatory");
+        }
+
         User requestedUser = userRepository.findUserByLogin(user.getLogin());
 
+        if (requestedUser == null) {
+            throw new ServletException("User does not exist");
+        }
+
         if (!user.getPassword().equals(requestedUser.getPassword())) {
-            throw new ServletException("Invalid login");
+            throw new ServletException("Invalid password");
         }else {
             return new LoginResponse(Jwts.builder().setSubject(user.getLogin())
                                          .claim("roles", "admin").setIssuedAt(new Date())
