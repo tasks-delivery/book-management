@@ -61,10 +61,9 @@
             }]
         }
 
-    console.log(bookData);
     $.ajax({
          method: "POST",
-         url: "book",
+         url: "api/book",
          dataType: "json",
          contentType: 'application/json',
          data: JSON.stringify(bookData),

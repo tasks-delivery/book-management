@@ -6,19 +6,12 @@ $(document).ready(function() {
 
       bookId = localStorage.getItem("bookId");
       findBookById(bookId);
-	  console.log('bookId from localStore is ' + bookId);
  });
 
  async function findBookById(bookId){
-		const endpoint = "/book/" + bookId;
+		const endpoint = "api/book/" + bookId;
 		let response = await fetch(endpoint);
 		let book = await response.json();
-		console.log('bookId is ' + book.id);
-		console.log('name is ' + book.name);
-		console.log('cat is ' + book.categories);
-		console.log('ava is ' + book.available);
-		console.log('first name is ' + book.user.firstName);
-		console.log('last name is ' + book.user.lastName);
 
 		$("#book-name").val(book.name);
 		$("#first-name").val(book.user.firstName);
@@ -89,10 +82,9 @@ $(document).ready(function() {
             }]
    }
 
-   console.log(bookData);
    $.ajax({
          method: "PUT",
-         url: "book/" + bookId,
+         url: "api/book/" + bookId,
          dataType: "json",
          contentType: 'application/json',
          data: JSON.stringify(bookData),

@@ -1,3 +1,10 @@
+paceOptions = {
+  elements: {
+    checkInterval: 100,
+    selectors: ['.content-loading']
+  }
+}
+
 function Book(id, name, categories, available) {
   this.id = id;
   this.name = name;
@@ -63,17 +70,17 @@ function removeBook(id){
       btnOk.addEventListener("click", function() {
 
         if(id != 0){
+			Pace.track(function(){
 
                  $.ajax({
                       method: "DELETE",
-                      url: "book/?id=" + id,
+                      url: "api/book/?id=" + id,
                       error: function(er) {
                         console.log(er);
                       },
                        statusCode: {
                           200: function() {
                               $('table').html("");
-                              console.log("Book is removed");
 
                               for(i = 0; i < books.length; i++){
 
@@ -89,22 +96,12 @@ function removeBook(id){
                               }
 
                               for(i = 0; i < books.length; i++){
-
                                  var book = new Book(books[i].id, books[i].name, books[i].categories, books[i].available);
-
-                                 console.log('bookId is ' + book.id);
-                                 console.log('name is ' + book.name);
-                                 console.log('cat is ' + book.categories);
-                                 console.log('ava is ' + book.available);
-
                                  renderTable(book)
-
                               }
 
                           },
                           400: function() {
-
-
 
                           },
                           404: function() {
@@ -113,6 +110,7 @@ function removeBook(id){
                         }
                     });
 
+			});
                 }
          div.style.display = "none";
          dialog.close();
@@ -167,7 +165,7 @@ $(document).ready(function() {
 
   var header = document.querySelector("header");
   var img = document.createElement("img")
-  img.setAttribute('onclick', 'location.href="/book";');
+  img.setAttribute('onclick', 'location.href="/add";');
   img.setAttribute('src', '/asset/admin-icon.png');
   img.setAttribute('th:src', '@{asset/admin-icon.png}');
   img.setAttribute('class', 'admin-icon');
@@ -191,29 +189,23 @@ $(document).ready(function() {
 
   async function findBook(categories, name) {
 
-  $('table').html("");
+    $('table').html("");
 
-  console.log('filtered name is ' + + name);
+    $('#initState').html("<div class='overlay'></div>");
 
-  const endpoint = "/books/?categories=" + categories + "&name=" + name;
+    Pace.restart();
+
+    const endpoint = "api/books/?categories=" + categories + "&name=" + name;
   	let response = await fetch(endpoint);
   	let json = await response.json();
+
+  	$('#initState').html("<div class='content-loading'></div>");
+
   	for(i = 0; i < json.length; i++){
-
 		var book = new Book(json[i].id, json[i].name, json[i].categories[0].name, json[i].available);
-
-  	    console.log('bookId is ' + book.id);
-  	    console.log('name is ' + book.name);
-  	    console.log('cat is ' + book.categories);
-  	    console.log('ava is ' + book.available);
-
         renderTable(book)
-
   	    books.push(book);
-
   	}
-
-  	console.log('books are ' + books);
 
   }
 

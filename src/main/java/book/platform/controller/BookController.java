@@ -31,7 +31,7 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
-    @PostMapping("/book")
+    @PostMapping("/api/book")
     public ResponseEntity createBook(@RequestBody String body) {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
 
@@ -73,7 +73,7 @@ public class BookController {
         }
     }
 
-    @PutMapping("/book/{id}")
+    @PutMapping("/api/book/{id}")
     public ResponseEntity updateBook(@RequestBody String body, @PathVariable Long id) {
         Book book = (Book)JsonUtil.jsonToObject(body, Book.class);
         Optional<Book> oldBook = bookRepository.findById(id);
@@ -175,7 +175,7 @@ public class BookController {
         return books;
     }
 
-    @DeleteMapping("/book")
+    @DeleteMapping("/api/book")
     public ResponseEntity deleteBook(@RequestParam("id") Long id) {
         List<Book> books = convertBookToList(bookRepository.findAll())
             .parallelStream()
@@ -194,13 +194,13 @@ public class BookController {
         }
     }
 
-    @GetMapping("/books")
+    @GetMapping("/api/books")
     public List<Book> getBooksByName(@RequestParam("categories") List<String> categories, @RequestParam("name") String name) {
         List<Book> books = convertBookToList(bookRepository.findAll());
         if (!categories.isEmpty()){
             if (!categories.get(0).isEmpty()){
                 books = books.stream()
-                    .filter(i -> i.getCategories().containsAll(categories))
+                    .filter(i -> i.getCategories().stream().map(Category::getName).collect(toList()).containsAll(categories))
                     .collect(toList());
             }
         }
@@ -214,7 +214,7 @@ public class BookController {
         return books;
     }
 
-    @GetMapping("/book/{id}")
+    @GetMapping("/api/book/{id}")
     public Book getBookById(@PathVariable Long id){
         return bookRepository.findById(id).get();
     }
