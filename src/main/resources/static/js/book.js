@@ -61,7 +61,6 @@
             }]
         }
 
-    console.log(bookData);
     $.ajax({
          method: "POST",
          url: "api/book",

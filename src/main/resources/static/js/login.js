@@ -34,7 +34,6 @@
     for(i = 0; i < fields.length; i ++){
 
         if(fields[i].val().length == 0){
-         console.log("wrong field")
              fields[i].parent().append('<span class="helper-text">Field is required</span>');
              formIsValida = false;
         }
@@ -50,8 +49,6 @@
                  password:password.val()
         }
 
-    console.log(userData);
-
     $.ajax({
          method: "POST",
          url: "login",
@@ -59,15 +56,10 @@
          contentType: 'application/json',
          data: JSON.stringify(userData),
          success: function(data) {
-
-            console.log("token is " + data.token);
 			document.cookie = "Authorization=" + data.token;
-
          },
 
          error: function(xhr, status, error){
-            console.log(xhr.responseText.includes('Invalid password'));
-
             if(xhr.responseText.includes('Invalid password')){
                 password.parent().append('<span class="helper-text">Wrong password</span>');
             }
